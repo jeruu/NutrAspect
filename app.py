@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route('/fx', methods=['GET', 'POST'])
 def fromProvaStampa(email):  # put application's code here
 
-    return ''' <h1>{} <- email :D <h1> '''.format(email)
+    return ''' <h1>{} <- email :D r <h1> '''.format(email)
 
 
 @app.route('/', methods=['GET', 'POST'])
