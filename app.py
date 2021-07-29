@@ -5,10 +5,10 @@ from flask import render_template
 app = Flask(__name__)
 
 
-@app.route('/eeee', methods=['GET', 'POST'])
-def fromProvaStampa():  # put application's code here
-    ris = 'email'
-    return ris
+@app.route('/fx', methods=['GET', 'POST'])
+def fromProvaStampa(email):  # put application's code here
+
+    return ''' <h1>{} <- email :D <h1> '''.format(email)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -19,7 +19,7 @@ def fromProva():
     ris = 'email ' + str(email) + ' ' + 'password ' + str(password)
     print(request.data)
     if email == 'secondogg@libero.it':
-        return fromProvaStampa()
+        return fromProvaStampa(email)
 
     #print(data)
     return  render_template('index.html')
