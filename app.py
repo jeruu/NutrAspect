@@ -18,7 +18,7 @@ def fromProva():
     password = request.form.get('password')
     ris = 'email ' + str(email) + ' ' + 'password ' + str(password)
     print(request.data)
-    if email == 'secondogg@libero.it':
+    if email == 'capocchia@provole.it':
         return fromProvaStampa(email)
 
     #print(data)
