@@ -9,33 +9,30 @@
 <body>
 
     <div class="container">
-        <img src="../static/images/NutrAspect.png" class="mx-auto d-block" alt="logo" style="max-width: 15%">
+        <img src="../static/images/NutrAspect.png" class="mx-auto d-block" alt="logo">
     </div>
 
     <div class="container">
         <form>
+
             <div class="mb-3">
                 <label for="InputEmail1" class="form-label">Email address</label>
                 <input type="email" class="form-control" id="InputEmail1" aria-describedby="emailHelp">
                 <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
             </div>
-            <div class="row mb-3 g-3 align-items-center">
-                <div class="col-auto">
-                    <label for="inputPassword6" class="col-form-label">Password</label>
-                </div>
-                <div class="col-auto">
-                    <input type="password" id="inputPassword6" class="form-control" aria-describedby="passwordHelpInline">
-                </div>
-                <div class="col-auto">
-                    <span id="passwordHelpInline" class="form-text">
-                        Must be 8-20 characters long.
-                    </span>
+
+            <div class="mb-3"><label for="inputPassword5" class="form-label">Password</label>
+                <input type="password" id="inputPassword5" class="form-control col-3" aria-describedby="passwordHelpBlock">
+                <div id="passwordHelpBlock" class="form-text">
+                    Your password must be 8-20 characters long.
                 </div>
             </div>
+
             <!-- <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="exampleCheck1">
                 <label class="form-check-label" for="exampleCheck1">Check me out</label>
             </div> -->
+
             <button type="submit" class="btn btn-primary">Submit</button>
 </form>
     </div>
