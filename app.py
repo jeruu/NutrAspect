@@ -24,6 +24,11 @@ def loginRiuscitoProva(email):  # put application's code here
     return ''' <h1>{} <- email :D <h1> '''.format(email)
 
 
+@app.route('/', methods=['GET', 'POST'])
+def indexProva():
+    return render_template('index.html')
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def loginProva():
     email = request.form.get('email')
