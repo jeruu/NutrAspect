@@ -4,10 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../static/css/bootstrap.css"/>
-    <title>Login NutrAspect</title>
+    <title>Login</title>
+    <link rel="stylesheet" href="../static/css/style.css">
 </head>
-<body>
+<body class="text-center" >
 
+
+    <main class="form-signin">
+      <form>
+        <img class="mb-4" src="../static/images/Logo.png" alt="" width="72" height="57">
+        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+        <div class="form-floating">
+          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+          <label for="floatingInput">Email address</label>
+        </div>
+        <div class="form-floating">
+          <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+          <label for="floatingPassword">Password</label>
+        </div>
+
+        <div class="checkbox mb-3">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+        <p class="mt-5 mb-3 text-muted">&copy; 2021–2021</p>
+      </form>
+    </main>
+
+
+
+<!--
     <div class="container">
         <img src="../static/images/NutrAspect.png" class="mx-auto d-block" alt="logo">
     </div>
@@ -21,22 +50,32 @@
                 <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
             </div>
 
-            <div class="mb-3"><label for="inputPassword5" class="form-label">Password</label>
-                <input type="password" id="inputPassword5" class="form-control col-3" aria-describedby="passwordHelpBlock">
+            <div class="container-fluid mb-3">
+    <div class="row">
+        <label for="inputPassword5" class="form-label">Password</label>
+        <input type="password" id="inputPassword5" class="form-control col-6" aria-describedby="passwordHelpBlock">
+        <div id="passwordHelpBlock" class="form-text">
+                    Your password must be 8-20 characters long.
+        </div>
+    </div>
+</div>
+
+             <div class="mb-3"><label for="inputPassword5" class="form-label row-cols-6">Password</label>
+                <input type="password" id="inputPassword5" class="form-control row-cols-6" aria-describedby="passwordHelpBlock">
                 <div id="passwordHelpBlock" class="form-text">
                     Your password must be 8-20 characters long.
                 </div>
-            </div>
+            </div> -->
 
             <!-- <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="exampleCheck1">
                 <label class="form-check-label" for="exampleCheck1">Check me out</label>
-            </div> -->
+            </div>
 
             <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+        </form>
     </div>
-
+-->
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="../static/js/bootstrap.js"></script>
