@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request
+from flask import redirect
 from flask import render_template
 import pymongo
 import os
@@ -52,8 +53,16 @@ def loginProva():
 
 
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def registerProva():
+    email = request.form.get('email')
+    password = request.form.get('password')
+    name = request.form.get('name')
+    surname = request.form.get('surname')
+
+    if email is not None and password is not None and name is not None and surname is not None:
+        utenti_collection.insert_one({"email": email , "password": password , "email": email , "name": name , "surname": surname})
+        return redirect('/')
     return render_template('register.html')
 
 
