@@ -7,12 +7,47 @@
     <title>Login</title>
     <link rel="stylesheet" href="../static/css/style.css">
 </head>
-<body class="text-center" >
+<body class="text-center" onload="funzionaprova()">
+
+
+
+            <script>
+            function funzionaprova() {
+                if ("{{ flash_message }}" == "ErroreLogin") {
+                 document.getElementById("{{ messagecaso }}").classList.remove('d-none');
+
+                }
+            }
+            </script>
+
+
+
+
+
+
 
 
     <main class="form-signin">
+
+
+
+
+
+
       <form method="post">
         <img class="mb-4" src="../static/images/Logo.png" alt="" width="72" height="57">
+
+
+
+
+          <div class="alert alert-danger alert-dismissible fade show d-none" role="alert" id="DivErrore">
+              <strong>Holy guacamole!</strong> You should check again your credentials.
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+
+
+
         <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
         <div class="form-floating">
