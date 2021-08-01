@@ -98,7 +98,7 @@ def registerProva():
 # Handler per le pagine non trovate
 @app.errorhandler(404)
 def page_not_found(e):
-    return '404 attenzion'
+    return render_template('404.html')
 
 
 if __name__ == '__main__':
