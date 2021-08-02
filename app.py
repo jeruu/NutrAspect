@@ -3,12 +3,16 @@ from flask import Flask
 from flask import request
 from flask import redirect
 from flask import render_template
+import flask_login
 import pymongo
 
 
 # assegnazione app
 app = Flask(__name__)
 
+
+#login_manager = flask_login.LoginManager()
+#login_manager.init_app(app)
 
 # login e inizializzazione db e collection
 client = pymongo.MongoClient('mongodb://localhost:27017/')
@@ -70,8 +74,7 @@ def loginProva():
     else:
         print('POST vuoto')
 
-    return render_template('login.html', errorType=errorMessage)
-
+    return render_template('login.html', divToShow=errorMessage)
 
 
 
@@ -89,6 +92,8 @@ def loginProva():
 @app.route('/register', methods=['GET', 'POST'])
 def registerProva():
 
+    messageDiv = ''
+
     # Ricaviamo dal post tutti i valori che ci servono per il sign up
     email = request.form.get('email')
     password = request.form.get('password')
@@ -100,12 +105,14 @@ def registerProva():
     if email is not None and password is not None and name is not None and surname is not None:
         if not utenti_collection.find_one({"email": email}):
             utenti_collection.insert_one({"email": email, "password": password, "name": name, "surname": surname})
-            # TODO pagina registrato successo
-            return redirect('/registrato_successo')
-
-    # Altrimenti ritorniamo la pagina del sing up  TODO con errore
-    return render_template('register.html')
-
+            messageDiv='RegisterSuccess'
+            # Carichiamo la pagina registrata con successo
+            return render_template('register.html', divToShow=messageDiv)
+        else:
+            # Altrimenti ritorniamo la pagina del register  con errore
+            messageDiv='RegisterError'
+            return render_template('register.html' , divToShow=messageDiv)
+    return render_template('register.html' , divToShow='')
 
 
 
