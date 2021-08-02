@@ -55,3 +55,11 @@ sbody {
   margin: auto;
 }
 
+.navbg {
+  background-color: #86b7fe;
+}
+
+.redexit {
+  color: red !important;
+}
+
