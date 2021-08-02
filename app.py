@@ -36,6 +36,18 @@ def indexProva():
     return render_template('index.html')
 
 
+
+@app.route('/home', methods=['GET', 'POST'])
+def homeProva():
+    return render_template('home.html')
+
+
+
+
+
+
+
+
 # Pagina per il login
 @app.route('/login', methods=['GET', 'POST'])
 def loginProva():
