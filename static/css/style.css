@@ -1,9 +1,9 @@
 html,
-body {
+hbody {
   height: 100%;
 }
 
-body {
+sbody {
   display: flex;
   align-items: center;
   padding-top: 40px;
