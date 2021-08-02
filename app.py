@@ -37,7 +37,7 @@ def indexProva():
 def loginProva():
 
     # Setup errore
-    erroremessaggio = ''
+    errorMessage = ['']
 
     # Ricaviamo dal post tutti i valori che ci servono per il log in
     email = request.form.get('email')
@@ -60,17 +60,29 @@ def loginProva():
         # se la query è andata a buon fine, controlliamo la password, se combaciano si effettua il log in
         if query is not None:
             if query['password'] != password:
-                erroremessaggio = 'ErroreLogin'
+                errorMessage= 'LoginError'
             else:
                 return loginRiuscitoProva(query)
 
-        erroremessaggio = 'ErroreLogin'
+        errorMessage= 'LoginError'
 
     # altrimenti todo
     else:
         print('POST vuoto')
 
-    return render_template('login.html', flash_message=erroremessaggio, messagecaso="DivErrore")
+    return render_template('login.html', errorType=errorMessage)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Pagina per il sign up
@@ -93,6 +105,17 @@ def registerProva():
 
     # Altrimenti ritorniamo la pagina del sing up  TODO con errore
     return render_template('register.html')
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Handler per le pagine non trovate

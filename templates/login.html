@@ -7,16 +7,12 @@
     <title>Login</title>
     <link rel="stylesheet" href="../static/css/style.css">
 </head>
-<body class="text-center" onload="funzionaprova()">
-
+<body class="text-center" onload='showDiv("{{ errorType }}")'>
 
 
             <script>
-            function funzionaprova() {
-                if ("{{ flash_message }}" == "ErroreLogin") {
-                 document.getElementById("{{ messagecaso }}").classList.remove('d-none');
-
-                }
+            function showDiv(divName) {
+                document.getElementById(divName).classList.remove('d-none');
             }
             </script>
 
@@ -29,18 +25,15 @@
 
     <main class="form-signin">
 
-
-
-
-
-
       <form method="post">
         <img class="mb-4" src="../static/images/Logo.png" alt="" width="72" height="57">
 
 
 
+<a id="diomeo"></a>
 
-          <div class="alert alert-danger alert-dismissible fade show d-none" role="alert" id="DivErrore">
+            <!-- TODO completare il guacamole-->
+          <div class="alert alert-danger alert-dismissible fade show d-none" role="alert" id="LoginError">
               <strong>Holy guacamole!</strong> You should check again your credentials.
               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
