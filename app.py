@@ -9,10 +9,10 @@ import pymongo
 
 # assegnazione app
 app = Flask(__name__)
+app.secret_key='chiavesecreta'
 
-
-#login_manager = flask_login.LoginManager()
-#login_manager.init_app(app)
+login_manager = flask_login.LoginManager()
+login_manager.init_app(app)
 
 # login e inizializzazione db e collection
 client = pymongo.MongoClient('mongodb://localhost:27017/')
@@ -50,7 +50,7 @@ def homeProva():
 
 # Pagina per il login
 @app.route('/login', methods=['GET', 'POST'])
-def loginProva():
+def loginNuovo():
 
     # Setup errore
     errorMessage = ['']
@@ -75,10 +75,10 @@ def loginProva():
 
         # se la query è andata a buon fine, controlliamo la password, se combaciano si effettua il log in
         if query is not None:
-            if query['password'] != password:
-                errorMessage= 'LoginError'
+            if query['password'] == password:
+                flask_login.login_user(user_loader(email))
             else:
-                return loginRiuscitoProva(query)
+                errorMessage= 'LoginError'
 
         errorMessage= 'LoginError'
 
@@ -87,6 +87,42 @@ def loginProva():
         print('POST vuoto')
 
     return render_template('login.html', divToShow=errorMessage)
+
+
+
+
+#TODO LOGIN NUOVO
+
+#franc
+class User(flask_login.UserMixin):
+    pass
+
+@login_manager.user_loader
+def user_loader(email):
+    query_result = utenti_collection.find_one({"email": email})
+    if query_result is None:
+        return
+    user = User()
+    user.id = email
+    return user
+
+
+
+@app.route('/logout', methods=['GET', 'POST'])
+@flask_login.login_required
+def logoutNuovo():
+    flask_login.logout_user()
+    return 'loguoutfatto'
+
+
+
+
+
+
+
+
+
+
 
 
 
