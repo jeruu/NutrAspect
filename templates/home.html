@@ -2,12 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Nutraspect HomePage</title>
+    <title>Nutraspect</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../static/css/bootstrap.css"/>
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/favicons/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicons/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicons/favicon-16x16.png') }}">
+    <link rel="mask-icon" href="{{ url_for('static', filename='images/favicons/safari-pinned-tab.svg') }}" color="#5bbad5">
+    <link rel="manifest" href="{{ url_for('static', filename='images/favicons/site.webmanifest') }}">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
 </head>
 <body>
     <!--
@@ -103,6 +109,7 @@
                     </table>
                 </div>
             </div>
+        </div>
             <div class="col-3"></div>
         <div class="row">
             <div class="col-sm-12 col-md-5 bg-light rounded-3 ps-xl-5 ms-md-5 ps-sm-0 ms-sm-0 py-3 my-3 pe-xl-5 me-md-5 pe-sm-0 me-sm-0">
@@ -157,6 +164,8 @@
                     </table>
                 </div>
             </div>
+        </div>
+        <div class="row">
             <div class="col-sm-12 col-md-5 bg-light rounded-3 ps-xl-5 ms-md-5 ps-sm-0 ms-sm-0 py-3 my-3 pe-xl-5 me-md-5 pe-sm-0 me-sm-0">
                 <h1 class="my-2 text-primary">Dinner</h1>
                 <div class="table-responsive">
