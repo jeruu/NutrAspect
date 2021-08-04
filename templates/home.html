@@ -10,10 +10,14 @@
 
 </head>
 <body>
-
-    <nav class="navbar navbar-expand-lg navbar-dark navbg">
+    <!--
+    ----BARRA DI NAVIGAZIONE DELLA PAGINA----
+    #todo inserire immagine, cambiare colore e aggiustare in generale
+    -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbg fixed-top">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">NutrAspect</a>
+
+          <a class="navbar-brand fw-bold mb-1" href="#">NutrAspect</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -42,29 +46,130 @@
         </div>
       </div>
     </nav>
+    <!--
+    ----CORPO DELLA PAGINA CON TUTTO----
+    #todo inserire tutte le 4 tabelle in container diversi e gestire il loro allineamento al meglio (vedere se aggiungere anche acqua)
+    -->
+    <div class="container-fluid py-4 under-nav">
+        <div>
+            <h2 class="border-bottom pb-3 mb-4" id="welcome">Welcome, scompagno</h2>
+        </div>
 
-
-
-
-<!-- #todo mettere il link github e altre info del progetto-->
-    <footer class="bd-footer py-5 mt-5 bg-light">
-  <div class="container py-5">
-    <div class="row">
-      <div class="col-6 col-lg-2 offset-lg-1 mb-3">
-        <h5>Links</h5>
-        <ul class="list-unstyled">
-          <li class="mb-2"><a href="/">Home</a></li>
-        </ul>
-      </div>
-      <div class="col-6 col-lg-2 mb-3">
-        <h5>Projects</h5>
-        <ul class="list-unstyled">
-          <li class="mb-2"><a href="https://github.com/twbs/bootstrap">Bootstrap 5</a></li>
-        </ul>
-      </div>
+        <div class="row mb-4 pb-3">
+            <div class="ps-1 mb-4 bg-light rounded-3">
+                <div class="container-fluid py-3 px-0 mx-auto">
+                    <h1>Daily summary</h1>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th scope="col">Nutrients</th>
+                              <th scope="col">Total</th>
+                              <th scope="col">Reccomended</th>
+                              <th scope="col">Reached Daily</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <th scope="row">Calories</th>
+                              <td>900</td>
+                              <td>1800</td>
+                              <td>50%</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Carbohydrates</th>
+                              <td>900</td>
+                              <td>1800</td>
+                              <td>50%</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Proteins</th>
+                              <td>900</td>
+                              <td>1800</td>
+                              <td>50%</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Fats</th>
+                              <td>900</td>
+                              <td>1800</td>
+                              <td>50%</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4 pb-3">
+            <div class="ps-1 mb-4 bg-light rounded-3">
+                <div class="container-fluid py-3 px-0 mx-auto">
+                    <h1>Daily summary</h1>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th scope="col">Nutrients</th>
+                              <th scope="col">Total</th>
+                              <th scope="col">Reccomended</th>
+                              <th scope="col">Reached Daily</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <th scope="row">Calories</th>
+                              <td>900</td>
+                              <td>1800</td>
+                              <td>50%</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Carbohydrates</th>
+                              <td>900</td>
+                              <td>1800</td>
+                              <td>50%</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Proteins</th>
+                              <td>900</td>
+                              <td>1800</td>
+                              <td>50%</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Fats</th>
+                              <td>900</td>
+                              <td>1800</td>
+                              <td>50%</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</footer>
+
+
+    <!--
+    ----FOOTER DELLA PAGINA----
+    #todo mettere il link github e altre info del progetto
+    -->
+    <footer class="bd-footer py-5 mt-5 bg-light">
+      <div class="container py-5">
+        <div class="row">
+          <div class="col-6 col-lg-2 offset-lg-1 mb-3">
+            <h5>Links</h5>
+            <ul class="list-unstyled">
+              <li class="mb-2"><a href="/">Home</a></li>
+            </ul>
+          </div>
+          <div class="col-6 col-lg-2 mb-3">
+            <h5>Projects</h5>
+            <ul class="list-unstyled">
+              <li class="mb-2"><a href="https://github.com/twbs/bootstrap">Bootstrap 5</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
 
 
     <script src="../static/js/main.js"></script>
