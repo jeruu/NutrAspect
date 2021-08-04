@@ -129,11 +129,10 @@ def registerProva():
 
 
 
-@app.route('/protected')
+@app.route('/protected/<variblae>')
 @flask_login.login_required
-def protectedProva():
-    return 'APREAORTETTA'
-
+def protectedProva(variblae):
+    return 'APREAORTETTA ' + str(variblae) +' ' + flask_login.current_user.id
 
 
 
