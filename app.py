@@ -1,4 +1,3 @@
-import flask
 from flask import Flask
 from flask import request
 from flask import redirect
@@ -6,10 +5,9 @@ from flask import render_template
 import flask_login
 import pymongo
 
-
 # assegnazione app
 app = Flask(__name__)
-app.secret_key='chiavesecreta'
+app.secret_key = 'chiavesecreta'
 
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
@@ -18,6 +16,7 @@ login_manager.init_app(app)
 client = pymongo.MongoClient('mongodb://localhost:27017/')
 db = client['NutrAspectProva']
 utenti_collection = db['utenti']
+
 
 # pagina per il login effettuato todo prove
 @app.route('/fx', methods=['GET', 'POST'])
@@ -36,22 +35,26 @@ def indexProva():
     return render_template('index.html')
 
 
-
 @app.route('/home', methods=['GET', 'POST'])
 def homeProva():
     return render_template('home.html')
 
 
+# franc
+class User(flask_login.UserMixin):
+    pass
 
 
-
-
+@login_manager.user_loader
+def user_loader(email):
+    user = User()
+    user.id = email
+    return user
 
 
 # Pagina per il login
 @app.route('/login', methods=['GET', 'POST'])
 def loginNuovo():
-
     # Setup errore
     errorMessage = ['']
 
@@ -62,7 +65,7 @@ def loginNuovo():
     # Controlliamo che nessun valore sia nullo, e nel caso procediamo con il controllo di email e password
     if email is not None and password is not None:
 
-        #todo eliminare
+        # todo eliminare
         print('POST pieno')
         print(email)
         print(password)
@@ -70,7 +73,7 @@ def loginNuovo():
         # Verifica se c'è un utente con la mail inserita
         query = utenti_collection.find_one({"email": email})
 
-        #todo eliminare
+        # todo eliminare
         print(query)
 
         # se la query è andata a buon fine, controlliamo la password, se combaciano si effettua il log in
@@ -78,9 +81,9 @@ def loginNuovo():
             if query['password'] == password:
                 flask_login.login_user(user_loader(email))
             else:
-                errorMessage= 'LoginError'
+                errorMessage = 'LoginError'
 
-        errorMessage= 'LoginError'
+        errorMessage = 'LoginError'
 
     # altrimenti todo
     else:
@@ -89,23 +92,7 @@ def loginNuovo():
     return render_template('login.html', divToShow=errorMessage)
 
 
-
-
-#TODO LOGIN NUOVO
-
-#franc
-class User(flask_login.UserMixin):
-    pass
-
-@login_manager.user_loader
-def user_loader(email):
-    query_result = utenti_collection.find_one({"email": email})
-    if query_result is None:
-        return
-    user = User()
-    user.id = email
-    return user
-
+# TODO LOGIN NUOVO
 
 
 @app.route('/logout', methods=['GET', 'POST'])
@@ -115,31 +102,9 @@ def logoutNuovo():
     return 'loguoutfatto'
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Pagina per il sign up
 @app.route('/register', methods=['GET', 'POST'])
 def registerProva():
-
     messageDiv = ''
 
     # Ricaviamo dal post tutti i valori che ci servono per il sign up
@@ -153,14 +118,26 @@ def registerProva():
     if email is not None and password is not None and name is not None and surname is not None:
         if not utenti_collection.find_one({"email": email}):
             utenti_collection.insert_one({"email": email, "password": password, "name": name, "surname": surname})
-            messageDiv='RegisterSuccess'
+            messageDiv = 'RegisterSuccess'
             # Carichiamo la pagina registrata con successo
             return render_template('register.html', divToShow=messageDiv)
         else:
             # Altrimenti ritorniamo la pagina del register  con errore
-            messageDiv='RegisterError'
-            return render_template('register.html' , divToShow=messageDiv)
-    return render_template('register.html' , divToShow='')
+            messageDiv = 'RegisterError'
+            return render_template('register.html', divToShow=messageDiv)
+    return render_template('register.html', divToShow='')
+
+
+
+@app.route('/protected')
+@flask_login.login_required
+def protectedProva():
+    return 'APREAORTETTA'
+
+
+
+
+
 
 
 
