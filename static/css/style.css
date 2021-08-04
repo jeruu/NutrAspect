@@ -66,3 +66,9 @@ sbody {
 .under-nav {
   padding-top: 75px !important
 }
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
