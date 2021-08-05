@@ -17,7 +17,8 @@ login_manager.init_app(app)
 # login e inizializzazione db e collection
 client = pymongo.MongoClient('mongodb://localhost:27017/')
 db = client['NutrAspect']
-utents_collection = db['utents']
+users_collection = db['utents']
+dailyWeight_collection = db['dailyWeight']
 
 
 # pagina per il login effettuato todo prove
@@ -73,7 +74,7 @@ def loginNuovo():
         print(password)
 
         # Verifica se c'è un utente con la mail inserita
-        query = utents_collection.find_one({"email": email})
+        query = users_collection.find_one({"email": email})
 
         # todo eliminare
         print(query)
@@ -124,8 +125,8 @@ def registerProva():
     # Controlliamo che nessun valore sia nullo, e nel caso procediamo con l'inserimento nel database previo controllo
     # di unicità dell'email #TEST
     if email is not None and password is not None and name is not None and surname is not None:
-        if not utents_collection.find_one({"email": email}):
-            utents_collection.insert_one(insQuery)
+        if not users_collection.find_one({"email": email}):
+            users_collection.insert_one(insQuery)
             messageDiv = 'RegisterSuccess'
             # Carichiamo la pagina registrata con successo
             return render_template('register.html', divToShow=messageDiv)
@@ -136,10 +137,16 @@ def registerProva():
     return render_template('register.html', divToShow='')
 
 
-@app.route('/protected/<variblae>')
+@app.route('/protected/weight', methods=['GET', 'POST'])
 @flask_login.login_required
-def protectedProva(variblae):
-    return 'APREAORTETTA ' + str(variblae) + ' ' + flask_login.current_user.id
+def weightProva():
+    weight = request.form.get('weight')
+    if weight is not None:
+        userId = users_collection.find_one({'email': flask_login.current_user.id})
+        print(flask_login.current_user.id)
+        dailyWeight_collection.insert_one({'weight': int(weight), 'day': datetime.datetime.today(), 'userId': str(userId['_id'])})
+
+    return render_template('weight.html')
 
 
 # Handler per le pagine non trovate
