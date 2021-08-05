@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Flask
 from flask import request
 from flask import redirect
@@ -14,8 +16,8 @@ login_manager.init_app(app)
 
 # login e inizializzazione db e collection
 client = pymongo.MongoClient('mongodb://localhost:27017/')
-db = client['NutrAspectProva']
-utenti_collection = db['utenti']
+db = client['NutrAspect']
+utents_collection = db['utents']
 
 
 # pagina per il login effettuato todo prove
@@ -56,7 +58,7 @@ def user_loader(email):
 @app.route('/login', methods=['GET', 'POST'])
 def loginNuovo():
     # Setup errore
-    errorMessage = ['']
+    messageDiv = ['']
 
     # Ricaviamo dal post tutti i valori che ci servono per il log in
     email = request.form.get('email')
@@ -71,7 +73,7 @@ def loginNuovo():
         print(password)
 
         # Verifica se c'è un utente con la mail inserita
-        query = utenti_collection.find_one({"email": email})
+        query = utents_collection.find_one({"email": email})
 
         # todo eliminare
         print(query)
@@ -80,16 +82,15 @@ def loginNuovo():
         if query is not None:
             if query['password'] == password:
                 flask_login.login_user(user_loader(email))
+                messageDiv = 'LoginSuccess'
             else:
-                errorMessage = 'LoginError'
-
-        errorMessage = 'LoginError'
+                messageDiv = 'LoginError'
 
     # altrimenti todo
     else:
         print('POST vuoto')
 
-    return render_template('login.html', divToShow=errorMessage)
+    return render_template('login.html', divToShow=messageDiv)
 
 
 # TODO LOGIN NUOVO
@@ -112,12 +113,19 @@ def registerProva():
     password = request.form.get('password')
     name = request.form.get('name')
     surname = request.form.get('surname')
+    sex = 'mascolo'
+    bDate = datetime.datetime.today()
+    height = 170
+    wSport = 1
+    permission = 0
 
+    insQuery = {"email": email, "password": password, "name": name, "surname": surname, "sex": sex, "bDate": bDate,
+                "height": height, "wSport": wSport, "permission": permission}
     # Controlliamo che nessun valore sia nullo, e nel caso procediamo con l'inserimento nel database previo controllo
     # di unicità dell'email #TEST
     if email is not None and password is not None and name is not None and surname is not None:
-        if not utenti_collection.find_one({"email": email}):
-            utenti_collection.insert_one({"email": email, "password": password, "name": name, "surname": surname})
+        if not utents_collection.find_one({"email": email}):
+            utents_collection.insert_one(insQuery)
             messageDiv = 'RegisterSuccess'
             # Carichiamo la pagina registrata con successo
             return render_template('register.html', divToShow=messageDiv)
@@ -128,25 +136,10 @@ def registerProva():
     return render_template('register.html', divToShow='')
 
 
-
 @app.route('/protected/<variblae>')
 @flask_login.login_required
 def protectedProva(variblae):
-    return 'APREAORTETTA ' + str(variblae) +' ' + flask_login.current_user.id
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return 'APREAORTETTA ' + str(variblae) + ' ' + flask_login.current_user.id
 
 
 # Handler per le pagine non trovate
