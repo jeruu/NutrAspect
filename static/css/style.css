@@ -72,3 +72,25 @@ sbody {
     margin: 0 auto;
 }
 
+.form-signin input[type="Weight"] {
+  margin-bottom: -1px;
+  border-radius: 0;
+}
+
+.form-signin input[type="Height"] {
+  margin-bottom: -1px;
+  border-radius: 0;
+}
+
+.form-signin input[type="Date"] {
+  margin-bottom: -1px;
+  border-radius: 0;
+}
+
+.form-datasin {
+  width: 100%;
+  max-width: 500px;
+  padding: 15px;
+  margin-left: auto;
+  margin-right: auto;
+}

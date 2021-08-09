@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nutraspect</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/favicons/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicons/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicons/favicon-16x16.png') }}">
+    <link rel="mask-icon" href="{{ url_for('static', filename='images/favicons/safari-pinned-tab.svg') }}" color="#5bbad5">
+    <link rel="manifest" href="{{ url_for('static', filename='images/favicons/site.webmanifest') }}">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+</head>
+<body class="d-flex h-100 text-center sbody hbody">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+        <main class="px-3 form-datasin">
+            <h1>Hi, scompagno.</h1>
+            <p class="lead">It seems that you have never added your information regarding your body. Please enter them before you can continue.</p>
+            <form method="post">
+                <div class="form-floating">
+                    <input type="weight" class="form-control" id="floatingWeight" placeholder="Weight" name="Weight">
+                    <label for="floatingWeight">Weight</label>
+                </div>
+                <div class="form-floating">
+                    <input type="height" class="form-control" id="floatingHeight" placeholder="Height" name="Height">
+                    <label for="floatingHeight">Height</label>
+                </div>
+                <div class="form-floating">
+                    <input type="date" class="form-control" id="floatingDate" placeholder="Date" name="Date">
+                    <label for="floatingDate">Date</label>
+                </div>
+                <div class="form-floating py-md-4">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                      <label class="form-check-label" for="inlineRadio1">Male</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                      <label class="form-check-label" for="inlineRadio2">Female</label>
+                    </div>
+                </div>
+                <div>
+                    <label for="customRange3" class="form-label">Weekly Training: <span id="demo"></span></label>
+                    <input type="range" class="form-range" min="0" max="7" step="1" id="customRange3">
+                </div>
+                <button class="w-100 btn btn-lg btn-primary mt-3" type="submit">Confirm</button>
+                <p class="mt-5 mb-3 text-muted">&copy; 2021–2021</p>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        var slider = document.getElementById("customRange3");
+        var output = document.getElementById("demo");
+        output.innerHTML = slider.value;
+
+        slider.oninput = function() {
+            if(this.value==7)
+                output.innerHTML = '7+'
+            else
+                output.innerHTML = this.value;
+        }
+    </script>
+
+</body>
+</html>
