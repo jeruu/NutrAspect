@@ -81,11 +81,29 @@
     #TODO inserire funzionalità al pulsante +
     -->
     <div class="position-absolute bottom-0 end-0 position-fixed">
-        <button class="btn btn-primary btn-circle btn-circle-xl mx-5 my-5 py-0">
-            +
-        </button>
+        <div class="container">
+            <div class="row">
+                <div class="col"></div>
+                <div id="btn-food" class="col my-2 d-none">
+                    <button class="btn btn-primary btn-circle btn-circle-xl m-auto py-0">
+                        A
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div id="btn-water" class="col my-2 d-none">
+                    <button class="btn btn-primary btn-circle btn-circle-xl py-0">
+                        B
+                    </button>
+                </div>
+                <div id="btn-plus" class="col my-2">
+                    <button class="btn btn-primary btn-circle btn-circle-xl py-0 ">
+                        +
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-
 
 
     <!--
@@ -281,7 +299,27 @@
       </div>
     </footer>
 
+    <script>
+        var active=false
+        var water=document.getElementById('btn-water');
+        var food=document.getElementById('btn-food');
+        var plus=document.getElementById('btn-plus');
 
+        plus.onclick=function() {myFunction()};
+
+        function myFunction(){
+            if(active==false){
+                water.classList.remove('d-none');
+                food.classList.remove('d-none');
+                active=true;
+            }
+            else{
+                water.classList.add('d-none');
+                food.classList.add('d-none');
+                active=false;
+            }
+        }
+    </script>
     <script src="../static/js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="../static/js/bootstrap.js"></script>
