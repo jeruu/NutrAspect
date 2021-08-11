@@ -83,6 +83,8 @@ def loginNuovo():
         if query is not None:
             if query['password'] == password:
                 flask_login.login_user(user_loader(email))
+                if dailyWeight_collection.find_one({"email": flask_login.current_user.id}) is None:
+                    return redirect('/bodyComp')
                 messageDiv = 'LoginSuccess'
             else:
                 messageDiv = 'LoginError'
@@ -90,6 +92,8 @@ def loginNuovo():
     # altrimenti todo
     else:
         print('POST vuoto')
+
+
 
     return render_template('login.html', divToShow=messageDiv)
 
@@ -114,27 +118,58 @@ def registerProva():
     password = request.form.get('password')
     name = request.form.get('name')
     surname = request.form.get('surname')
-    sex = 'mascolo'
-    bDate = datetime.datetime.today()
-    height = 170
-    wSport = 1
+    sex = 'todo'
+    bDate = request.form.get('date')
+    height = 0
+    wSport = 0
     permission = 0
 
-    insQuery = {"email": email, "password": password, "name": name, "surname": surname, "sex": sex, "bDate": bDate,
-                "height": height, "wSport": wSport, "permission": permission}
-    # Controlliamo che nessun valore sia nullo, e nel caso procediamo con l'inserimento nel database previo controllo
-    # di unicità dell'email #TEST
-    if email is not None and password is not None and name is not None and surname is not None:
-        if not users_collection.find_one({"email": email}):
+    if bDate is not None:
+        bDate = datetime.datetime.strptime(bDate, '%Y-%m-%d')
+        if yearToday(bDate) <= 0:
+            bDate = None
+
+    if email is not None:
+        try:
+            if users_collection.find_one({'email': email}) is not None:
+                raise
+            insQuery = {"email": email, "password": password, "name": name, "surname": surname, "sex": sex,
+                        "bDate": bDate,
+                        "height": height, "wSport": wSport, "permission": permission}
             users_collection.insert_one(insQuery)
-            messageDiv = 'RegisterSuccess'
-            # Carichiamo la pagina registrata con successo
-            return render_template('register.html', divToShow=messageDiv)
-        else:
-            # Altrimenti ritorniamo la pagina del register  con errore
+        except:
             messageDiv = 'RegisterError'
             return render_template('register.html', divToShow=messageDiv)
+
+        messageDiv = 'RegisterSuccess'
+        # Carichiamo la pagina registrata con successo
+        return render_template('register.html', divToShow=messageDiv)
+
     return render_template('register.html', divToShow='')
+
+
+@app.route('/bodyComp', methods=['GET', 'POST'])
+def bodyCompProva():
+    weight = request.form.get('weight')
+    height = request.form.get('height')
+    sex = request.form.get('sex')
+    wSport = request.form.get('wSport')
+    print('{} {} {} {}'.format(weight,height,sex,wSport))
+    if dailyWeight_collection.find_one('userEmail') is None:
+        try:
+            dailyWeight_collection.insert_one({'weight': weight, 'day': datetime.datetime.today(), 'userEmail':flask_login.current_user.id})
+            #users_collection.update_one({'email': flask_login.current_user.id}, {"$set": {'sex': sex, 'wSport':wSport}})
+            return redirect('/home')
+        except:
+            print('ECCEZIUNAL')
+            return render_template("bodyComp.html")
+
+    return render_template("bodyComp.html")
+
+
+@app.route('/foodSelector', methods=['GET', 'POST'])
+def foodSelectorProva():
+    return render_template("foodSelector.html")
 
 
 @app.route('/protected/weight', methods=['GET', 'POST'])
@@ -143,8 +178,8 @@ def weightProva():
     weight = request.form.get('weight')
     if weight is not None:
         userId = users_collection.find_one({'email': flask_login.current_user.id})
-        print(flask_login.current_user.id)
-        dailyWeight_collection.insert_one({'weight': int(weight), 'day': datetime.datetime.today(), 'userId': str(userId['_id'])})
+        dailyWeight_collection.insert_one(
+            {'weight': int(weight), 'day': datetime.datetime.today(), 'userEmail': flask_login.current_user.id})
 
     return render_template('weight.html')
 
@@ -157,3 +192,11 @@ def page_not_found(e):
 
 if __name__ == '__main__':
     app.run()
+
+
+def yearToday(bDate):
+    today = datetime.datetime.today()
+    if bDate.month <= today.month:
+        if bDate.day <= today.day:
+            return int(today.year - bDate.year)
+    return int(today.year - bDate.year) - 1
