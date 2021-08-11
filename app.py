@@ -17,7 +17,7 @@ login_manager.init_app(app)
 # login e inizializzazione db e collection
 client = pymongo.MongoClient('mongodb://localhost:27017/')
 db = client['NutrAspect']
-users_collection = db['utents']
+users_collection = db['users']
 dailyWeight_collection = db['dailyWeight']
 
 
