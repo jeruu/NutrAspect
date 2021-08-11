@@ -83,7 +83,7 @@ def loginNuovo():
         if query is not None:
             if query['password'] == password:
                 flask_login.login_user(user_loader(email))
-                if dailyWeight_collection.find_one({"email": flask_login.current_user.id}) is None:
+                if dailyWeight_collection.find_one({"userEmail": flask_login.current_user.id}) is None:
                     return redirect('/bodyComp')
                 messageDiv = 'LoginSuccess'
             else:
@@ -92,8 +92,6 @@ def loginNuovo():
     # altrimenti todo
     else:
         print('POST vuoto')
-
-
 
     return render_template('login.html', divToShow=messageDiv)
 
@@ -152,19 +150,19 @@ def registerProva():
 def bodyCompProva():
     weight = request.form.get('weight')
     height = request.form.get('height')
-    sex = request.form.get('sex')
+    sex = request.form.get('sexRadio')
     wSport = request.form.get('wSport')
-    print('{} {} {} {}'.format(weight,height,sex,wSport))
+    print('{} {} {} {} {}'.format(weight, height, sex, wSport, flask_login.current_user.id))
     if dailyWeight_collection.find_one('userEmail') is None:
         try:
-            dailyWeight_collection.insert_one({'weight': weight, 'day': datetime.datetime.today(), 'userEmail':flask_login.current_user.id})
-            #users_collection.update_one({'email': flask_login.current_user.id}, {"$set": {'sex': sex, 'wSport':wSport}})
+            dailyWeight_collection.insert_one(
+                {'weight': int(weight), 'day': datetime.datetime.today(), 'userEmail': flask_login.current_user.id})
+            users_collection.update_one({'email': flask_login.current_user.id}, {"$set": {'height':int(height), 'sex': sex, 'wSport':int(wSport)}})
             return redirect('/home')
-        except:
-            print('ECCEZIUNAL')
+        except Exception as e:
             return render_template("bodyComp.html")
-
-    return render_template("bodyComp.html")
+    else:
+        return render_template("weight.html")
 
 
 @app.route('/foodSelector', methods=['GET', 'POST'])
