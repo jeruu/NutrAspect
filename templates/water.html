@@ -77,16 +77,44 @@
       </div>
     </nav>
 
-    <main class="my-auto py-4 under-nav">
-        <div class="row justify-content-evenly">
-            <div class="col-md-5 col-sm-12 mx-auto align-self-center">
-                diop
+
+
+
+    <main class="container my-auto py-4 under-nav">
+        <div class="row my-2">
+            <h2 class="py-3">Water Consumption</h2>
+            <div class="col-sm-12 col-md-5 mx-auto">
+                <h4 style="display: inline">Today's Water Total</h4>
+                <h4 style="display: inline" class="text-decoration-underline ps-5">2000 ml</h4>
+                <p class="my-3">Aim to drink at least <span id="totalLiters" name="totalLiters">2000</span> milliliters of water today. You can quick add common sizes or enter a custom amount</p>
+                <h4>Quick add</h4>
+                <div class="mb-4">
+                    <button class="btn btn-outline-primary">+250 ml.</button>
+                    <button class="btn btn-outline-primary">+500 ml.</button>
+                    <button class="btn btn-outline-primary">+1000 ml.</button>
+                </div>
+                <h4>Add custom</h4>
+                <form>
+                        <div class="input-group mb-3" style="width: 50%">
+                            <input type="text" class="form-control" placeholder="" aria-label="Custom Water" aria-describedby="basic-addon2">
+                            <span class="input-group-text" id="basic-addon2">ml</span>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                </form>
             </div>
-            <div class="col-md-5 col-sm-12 mx-auto align-self-center">
-                boia
+            <div class="col-sm-12 col-md-5 text-center mx-auto bg-light bg-gradient my-2">
+                <div>
+
+                </div>
+                <div class="glass">
+                    <div class="water"><p id="litersPer" name="litersPer">87%</p></div>
+                </div>
             </div>
         </div>
     </main>
+
+
+
 
     <!--
     ----FOOTER DELLA PAGINA----
@@ -112,6 +140,13 @@
     </footer>
 
     <script src="../static/js/main.js"></script>
+    <script>
+        $(function(){
+            $('.water').animate({
+                height: '87%'
+            }, 1000)
+        })
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="../static/js/bootstrap.js"></script>
 
