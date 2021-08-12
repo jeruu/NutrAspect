@@ -181,9 +181,6 @@ def bodyCompProva():
             dWat = 2000
             dCal = int(65.5 + (9.563 * float(weight)) + (1.850 * int(height)) - (4.676 * int(yearUser)))
 
-
-        print(dCal)
-
         if int(wSport) == 0:
             dCal *= 1.2
         else:
@@ -203,8 +200,7 @@ def bodyCompProva():
         if objective == 'wGain':
             dCal += 500
 
-        dCal=int(dCal)
-        print(dCal)
+        dCal = int(dCal)
     except Exception as e:
         print(e)
         return render_template("bodyComp.html")
@@ -254,16 +250,26 @@ if __name__ == '__main__':
 @app.route('/water', methods=['GET', 'POST'])
 def waterprova():
     water = request.form.get('mlwater')
-    todayml = 0
+    reset = request.form.get('reset')
     racml = users_collection.find_one({'email': flask_login.current_user.id})["dWat"]
-    print(racml)
-    try:
-        dailyWater_collection.insert_one(
-            {'ml': int(water), 'day': datetime.datetime.today(), 'userEmail': flask_login.current_user.id})
-        todayml += int(water)
-        return render_template('water.html', todayml=todayml, racml=racml)
-    except Exception as e:
-        print(e)
+    todayml=0
+    if water is not None:
+        if isNumber(water):
+            try:
+                todayml = dailyWater_collection.find_one({'userEmail': flask_login.current_user.id, 'day': todayDate()})['ml']
+                todayml += int(water)
+                dailyWater_collection.update_one({'userEmail': flask_login.current_user.id, 'day': todayDate()},
+                                                 {"$set": {'ml': todayml}})
+            except:
+                todayml += int(water)
+                dailyWater_collection.insert_one({'userEmail': flask_login.current_user.id, 'day': todayDate(), 'ml': todayml})
+
+
+
+    if reset is not None:
+        dailyWater_collection.delete_one({'userEmail': flask_login.current_user.id, 'day': todayDate()})
+
+
     return render_template('water.html', todayml=todayml, racml=racml)
 
 
@@ -273,3 +279,15 @@ def yearToday(bDate):
         if bDate.day <= today.day:
             return int(today.year - bDate.year)
     return int(today.year - bDate.year) - 1
+
+
+def todayDate():
+    dt = datetime.datetime.today()
+    return dt.replace(hour=0, minute=0, second=0, microsecond=0)
+
+def isNumber(water):
+    try:
+        int(water)
+        return True
+    except:
+        return False
