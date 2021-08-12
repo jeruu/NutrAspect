@@ -145,6 +145,7 @@
 
     <script>
         wPer=Math.min((parseInt({{todayml}})*100)/parseInt({{racml}}),100);
+        wPer=parseInt(wPer)
         //wPer=toString(wPer)
         var el=document.getElementById("waterInput");
         var b250=document.getElementById("btn250");

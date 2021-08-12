@@ -167,18 +167,58 @@ def bodyCompProva():
     sex = request.form.get('sexRadio')
     wSport = request.form.get('wSport')
 
+    objective = request.form.get('wRadio')
+
+    dCal = 0
+    dWat = 0
+
+    try:
+        yearUser = yearToday(users_collection.find_one({'email': flask_login.current_user.id})['bDate'])
+        if sex == 'male':
+            dWat = 2800
+            dCal = int(66.5 + (13.75 * float(weight)) + (5 * int(height)) - (6.775 * int(yearUser)))
+        else:
+            dWat = 2000
+            dCal = int(65.5 + (9.563 * float(weight)) + (1.850 * int(height)) - (4.676 * int(yearUser)))
 
 
+        print(dCal)
 
+        if int(wSport) == 0:
+            dCal *= 1.2
+        else:
+            if int(wSport) == 1 or int(wSport) == 2:
+                dCal *= 1.375
+            else:
+                if int(wSport) == 3 or int(wSport) == 4:
+                    dCal *= 1.50
+                else:
+                    if int(wSport) == 5:
+                        dCal *= 1.725
+                    else:
+                        dCal *= 1.9
+
+        if objective == 'wLoss':
+            dCal -= (dCal * 17) / 100
+        if objective == 'wGain':
+            dCal += 500
+
+        dCal=int(dCal)
+        print(dCal)
+    except Exception as e:
+        print(e)
+        return render_template("bodyComp.html")
 
     if dailyWeight_collection.find_one('userEmail') is None:
         try:
             dailyWeight_collection.insert_one(
-                {'weight': int(weight), 'day': datetime.datetime.today(), 'userEmail': flask_login.current_user.id})
+                {'weight': float(weight), 'day': datetime.datetime.today(), 'userEmail': flask_login.current_user.id})
             users_collection.update_one({'email': flask_login.current_user.id},
-                                        {"$set": {'height': int(height), 'sex': sex, 'wSport': int(wSport)}})
+                                        {"$set": {'height': int(height), 'sex': sex, 'wSport': int(wSport),
+                                                  'dWat': dWat, 'dCal': dCal, 'objective': objective}})
             return redirect('/home')
         except Exception as e:
+            print(e)
             return render_template("bodyComp.html")
     else:
         return render_template("weight.html")
@@ -196,7 +236,7 @@ def weightProva():
     if weight is not None:
         userId = users_collection.find_one({'email': flask_login.current_user.id})
         dailyWeight_collection.insert_one(
-            {'weight': int(weight), 'day': datetime.datetime.today(), 'userEmail': flask_login.current_user.id})
+            {'weight': float(weight), 'day': datetime.datetime.today(), 'userEmail': flask_login.current_user.id})
 
     return render_template('weight.html')
 
@@ -215,16 +255,16 @@ if __name__ == '__main__':
 def waterprova():
     water = request.form.get('mlwater')
     todayml = 0
-    racml = 2000
-
+    racml = users_collection.find_one({'email': flask_login.current_user.id})["dWat"]
+    print(racml)
     try:
         dailyWater_collection.insert_one(
             {'ml': int(water), 'day': datetime.datetime.today(), 'userEmail': flask_login.current_user.id})
         todayml += int(water)
-        return render_template('water.html', todayml=todayml, racml=racml, perml=min((todayml * 100) / racml, 100))
+        return render_template('water.html', todayml=todayml, racml=racml)
     except Exception as e:
         print(e)
-    return render_template('water.html', todayml=todayml, racml=racml, perml=min((todayml * 100) / racml, 100))
+    return render_template('water.html', todayml=todayml, racml=racml)
 
 
 def yearToday(bDate):
