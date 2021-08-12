@@ -39,6 +39,7 @@ def indexProva():
     dailyWater_collection.delete_many({})
     return render_template('index.html')
 
+
 @app.route('/cls', methods=['GET', 'POST'])
 def puliscituttooo():
     dailyWater_collection.delete_many({})
@@ -97,7 +98,7 @@ def loginNuovo():
                 messageDiv = 'LoginSuccess'
             else:
                 messageDiv = 'LoginError'
-        else :
+        else:
             messageDiv = 'LoginError'
 
     # altrimenti todo
@@ -131,6 +132,9 @@ def registerProva():
     bDate = request.form.get('date')
     height = 0
     wSport = 0
+    dCal = 0
+    dWat = 0
+    objective = 'todo'
     permission = 0
 
     if email is not None:
@@ -142,7 +146,8 @@ def registerProva():
                 raise
             insQuery = {"email": email, "password": password, "name": name, "surname": surname, "sex": sex,
                         "bDate": bDate,
-                        "height": height, "wSport": wSport, "permission": permission}
+                        "height": height, 'objective': objective, 'dCal': dCal, 'dWat': dWat, "wSport": wSport,
+                        "permission": permission}
             users_collection.insert_one(insQuery)
         except:
             messageDiv = 'RegisterError'
@@ -161,12 +166,17 @@ def bodyCompProva():
     height = request.form.get('height')
     sex = request.form.get('sexRadio')
     wSport = request.form.get('wSport')
-    print('{} {} {} {} {}'.format(weight, height, sex, wSport, flask_login.current_user.id))
+
+
+
+
+
     if dailyWeight_collection.find_one('userEmail') is None:
         try:
             dailyWeight_collection.insert_one(
                 {'weight': int(weight), 'day': datetime.datetime.today(), 'userEmail': flask_login.current_user.id})
-            users_collection.update_one({'email': flask_login.current_user.id}, {"$set": {'height': int(height), 'sex': sex, 'wSport':int(wSport)}})
+            users_collection.update_one({'email': flask_login.current_user.id},
+                                        {"$set": {'height': int(height), 'sex': sex, 'wSport': int(wSport)}})
             return redirect('/home')
         except Exception as e:
             return render_template("bodyComp.html")
@@ -203,17 +213,19 @@ if __name__ == '__main__':
 
 @app.route('/water', methods=['GET', 'POST'])
 def waterprova():
-    water= request.form.get('mlwater')
-    todayml= 0
-    racml= 2000
+    water = request.form.get('mlwater')
+    todayml = 0
+    racml = 2000
 
     try:
-        dailyWater_collection.insert_one({'ml':int(water), 'day':datetime.datetime.today(), 'userEmail':flask_login.current_user.id})
-        todayml+=int(water)
-        return render_template('water.html', todayml=todayml, racml=racml, perml=min((todayml*100)/racml, 100))
+        dailyWater_collection.insert_one(
+            {'ml': int(water), 'day': datetime.datetime.today(), 'userEmail': flask_login.current_user.id})
+        todayml += int(water)
+        return render_template('water.html', todayml=todayml, racml=racml, perml=min((todayml * 100) / racml, 100))
     except Exception as e:
         print(e)
-    return render_template('water.html', todayml=todayml, racml=racml, perml=min((todayml*100)/racml, 100))
+    return render_template('water.html', todayml=todayml, racml=racml, perml=min((todayml * 100) / racml, 100))
+
 
 def yearToday(bDate):
     today = datetime.datetime.today()
