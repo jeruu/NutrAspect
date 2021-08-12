@@ -19,6 +19,7 @@ client = pymongo.MongoClient('mongodb://localhost:27017/')
 db = client['NutrAspect']
 users_collection = db['users']
 dailyWeight_collection = db['dailyWeight']
+dailyWater_collection = db['dailyWater']
 
 
 # pagina per il login effettuato todo prove
@@ -35,6 +36,14 @@ def loginRiuscitoProva(query):  # put application's code here
 # todo index
 @app.route('/', methods=['GET', 'POST'])
 def indexProva():
+    dailyWater_collection.delete_many({})
+    return render_template('index.html')
+
+@app.route('/cls', methods=['GET', 'POST'])
+def puliscituttooo():
+    dailyWater_collection.delete_many({})
+    dailyWeight_collection.delete_many({})
+    users_collection.delete_many({})
     return render_template('index.html')
 
 
@@ -88,6 +97,8 @@ def loginNuovo():
                 messageDiv = 'LoginSuccess'
             else:
                 messageDiv = 'LoginError'
+        else :
+            messageDiv = 'LoginError'
 
     # altrimenti todo
     else:
@@ -122,14 +133,12 @@ def registerProva():
     wSport = 0
     permission = 0
 
-    if bDate is not None:
-        bDate = datetime.datetime.strptime(bDate, '%Y-%m-%d')
-        if yearToday(bDate) <= 0:
-            bDate = None
-
     if email is not None:
         try:
             if users_collection.find_one({'email': email}) is not None:
+                raise
+            bDate = datetime.datetime.strptime(bDate, '%Y-%m-%d')
+            if yearToday(bDate) <= 0:
                 raise
             insQuery = {"email": email, "password": password, "name": name, "surname": surname, "sex": sex,
                         "bDate": bDate,
@@ -157,7 +166,7 @@ def bodyCompProva():
         try:
             dailyWeight_collection.insert_one(
                 {'weight': int(weight), 'day': datetime.datetime.today(), 'userEmail': flask_login.current_user.id})
-            users_collection.update_one({'email': flask_login.current_user.id}, {"$set": {'height':int(height), 'sex': sex, 'wSport':int(wSport)}})
+            users_collection.update_one({'email': flask_login.current_user.id}, {"$set": {'height': int(height), 'sex': sex, 'wSport':int(wSport)}})
             return redirect('/home')
         except Exception as e:
             return render_template("bodyComp.html")
@@ -191,6 +200,20 @@ def page_not_found(e):
 if __name__ == '__main__':
     app.run()
 
+
+@app.route('/water', methods=['GET', 'POST'])
+def waterprova():
+    water= request.form.get('mlwater')
+    todayml= 0
+    racml= 2000
+
+    try:
+        dailyWater_collection.insert_one({'ml':int(water), 'day':datetime.datetime.today(), 'userEmail':flask_login.current_user.id})
+        todayml+=int(water)
+        return render_template('water.html', todayml=todayml, racml=racml, perml=min((todayml*100)/racml, 100))
+    except Exception as e:
+        print(e)
+    return render_template('water.html', todayml=todayml, racml=racml, perml=min((todayml*100)/racml, 100))
 
 def yearToday(bDate):
     today = datetime.datetime.today()

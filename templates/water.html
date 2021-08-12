@@ -85,8 +85,8 @@
             <h2 class="py-3">Water Consumption</h2>
             <div class="col-sm-12 col-md-5 mx-auto">
                 <h4 style="display: inline">Today's Water Total</h4>
-                <h4 style="display: inline" class="text-decoration-underline ps-5">2000 ml</h4>
-                <p class="my-3">Aim to drink at least <span id="totalLiters" name="totalLiters">2000</span> milliliters of water today. You can quick add common sizes or enter a custom amount</p>
+                <h4 style="display: inline" class="text-decoration-underline ps-5">{{ todayml }} ml</h4>
+                <p class="my-3">Aim to drink at least <span id="totalLiters" name="totalLiters">{{ racml }}</span> milliliters of water today. You can quick add common sizes or enter a custom amount</p>
                 <h4>Quick add</h4>
                 <div class="mb-4">
                     <button id="btn250" class="btn btn-outline-primary">+250 ml.</button>
@@ -94,9 +94,9 @@
                     <button id="btn1000" class="btn btn-outline-primary">+1000 ml.</button>
                 </div>
                 <h4>Add custom</h4>
-                <form method="post">
+                <form method="POST">
                         <div class="input-group mb-3" style="width: 50%">
-                            <input type="text" class="form-control" aria-label="Custom Water" aria-describedby="basic-addon2" id="waterInput">
+                            <input type="text" class="form-control" aria-label="Custom Water" aria-describedby="basic-addon2" id="waterInput" name="mlwater">
                             <span class="input-group-text" id="basic-addon2">ml</span>
                         </div>
                         <button type="submit" class="btn btn-primary">Add</button>
@@ -109,7 +109,7 @@
 
                 </div>
                 <div class="glass">
-                    <div class="water"><p id="litersPer" name="litersPer">87%</p></div>
+                    <div class="water"><p id="litersPer" name="litersPer">wPer%</p></div>
                 </div>
             </div>
         </div>
@@ -142,7 +142,10 @@
     </footer>
 
     <script src="../static/js/main.js"></script>
+
     <script>
+        wPer=Math.min((parseInt({{todayml}})*100)/parseInt({{racml}}),100);
+        //wPer=toString(wPer)
         var el=document.getElementById("waterInput");
         var b250=document.getElementById("btn250");
         var b500=document.getElementById("btn500");
@@ -151,8 +154,9 @@
 
         $(function(){
             $('.water').animate({
-                height: '87%'
+                height: wPer+'%'
             }, 1000)
+            document.getElementById("litersPer").innerText=wPer+'%';
         })
 
         b250.onclick=function() {insertInput(250)}
