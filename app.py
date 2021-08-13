@@ -36,7 +36,6 @@ def loginRiuscitoProva(query):  # put application's code here
 # todo index
 @app.route('/', methods=['GET', 'POST'])
 def indexProva():
-    dailyWater_collection.delete_many({})
     return render_template('index.html')
 
 
@@ -171,44 +170,19 @@ def bodyCompProva():
 
     dCal = 0
     dWat = 0
-
-    try:
+    if dailyWeight_collection.find_one({'userEmail': flask_login.current_user.id}) is None:
         yearUser = yearToday(users_collection.find_one({'email': flask_login.current_user.id})['bDate'])
-        if sex == 'male':
-            dWat = 2800
-            dCal = int(66.5 + (13.75 * float(weight)) + (5 * int(height)) - (6.775 * int(yearUser)))
-        else:
-            dWat = 2000
-            dCal = int(65.5 + (9.563 * float(weight)) + (1.850 * int(height)) - (4.676 * int(yearUser)))
+        try:
+            yearUser = yearToday(users_collection.find_one({'email': flask_login.current_user.id})['bDate'])
+            [dWat, dCal] = calWat(sex, int(wSport), yearUser, weight, height, objective)
+            dCal = int(dCal)
+        except Exception as e:
+            print(e)
+            return render_template("bodyComp.html")
 
-        if int(wSport) == 0:
-            dCal *= 1.2
-        else:
-            if int(wSport) == 1 or int(wSport) == 2:
-                dCal *= 1.375
-            else:
-                if int(wSport) == 3 or int(wSport) == 4:
-                    dCal *= 1.50
-                else:
-                    if int(wSport) == 5:
-                        dCal *= 1.725
-                    else:
-                        dCal *= 1.9
-
-        if objective == 'wLoss':
-            dCal -= (dCal * 17) / 100
-        if objective == 'wGain':
-            dCal += 500
-
-        dCal = int(dCal)
-    except Exception as e:
-        print(e)
-        return render_template("bodyComp.html")
-
-    if dailyWeight_collection.find_one('userEmail') is None:
         try:
             dailyWeight_collection.insert_one(
-                {'weight': float(weight), 'day': datetime.datetime.today(), 'userEmail': flask_login.current_user.id})
+                {'weight': float(weight), 'day': todayDate(), 'userEmail': flask_login.current_user.id})
             users_collection.update_one({'email': flask_login.current_user.id},
                                         {"$set": {'height': int(height), 'sex': sex, 'wSport': int(wSport),
                                                   'dWat': dWat, 'dCal': dCal, 'objective': objective}})
@@ -217,7 +191,7 @@ def bodyCompProva():
             print(e)
             return render_template("bodyComp.html")
     else:
-        return render_template("weight.html")
+        return redirect('/protected/weight')
 
 
 @app.route('/foodSelector', methods=['GET', 'POST'])
@@ -228,13 +202,20 @@ def foodSelectorProva():
 @app.route('/protected/weight', methods=['GET', 'POST'])
 @flask_login.login_required
 def weightProva():
+    import html
     weight = request.form.get('weight')
+    chartData = [['Date', 'Weight']]
     if weight is not None:
         userId = users_collection.find_one({'email': flask_login.current_user.id})
         dailyWeight_collection.insert_one(
-            {'weight': float(weight), 'day': datetime.datetime.today(), 'userEmail': flask_login.current_user.id})
+            {'weight': float(weight), 'day': todayDate(), 'userEmail': flask_login.current_user.id})
 
-    return render_template('weight.html')
+    rec = dailyWeight_collection.find({'userEmail': flask_login.current_user.id})
+    for x in rec:
+        chartData.append([x['day'].strftime("%d/%m/%Y"), x['weight']])
+    print(chartData)
+
+    return render_template('weight.html', weightArray=html.unescape(chartData))
 
 
 # Handler per le pagine non trovate
@@ -252,23 +233,24 @@ def waterprova():
     water = request.form.get('mlwater')
     reset = request.form.get('reset')
     racml = users_collection.find_one({'email': flask_login.current_user.id})["dWat"]
-    todayml=0
-    if water is not None:
+    todayml = 0
+
+
+    try:
+        todayml = \
+            dailyWater_collection.find_one({'userEmail': flask_login.current_user.id, 'day': todayDate()})['ml']
         if isNumber(water):
-            try:
-                todayml = dailyWater_collection.find_one({'userEmail': flask_login.current_user.id, 'day': todayDate()})['ml']
-                todayml += int(water)
-                dailyWater_collection.update_one({'userEmail': flask_login.current_user.id, 'day': todayDate()},
-                                                 {"$set": {'ml': todayml}})
-            except:
-                todayml += int(water)
-                dailyWater_collection.insert_one({'userEmail': flask_login.current_user.id, 'day': todayDate(), 'ml': todayml})
-
-
+            todayml += int(water)
+        dailyWater_collection.update_one({'userEmail': flask_login.current_user.id, 'day': todayDate()},
+                                         {"$set": {'ml': todayml}})
+    except:
+        if isNumber(water):
+            todayml += int(water)
+        dailyWater_collection.insert_one(
+            {'userEmail': flask_login.current_user.id, 'day': todayDate(), 'ml': todayml})
 
     if reset is not None:
         dailyWater_collection.delete_one({'userEmail': flask_login.current_user.id, 'day': todayDate()})
-
 
     return render_template('water.html', todayml=todayml, racml=racml)
 
@@ -285,9 +267,40 @@ def todayDate():
     dt = datetime.datetime.today()
     return dt.replace(hour=0, minute=0, second=0, microsecond=0)
 
+
 def isNumber(water):
     try:
         int(water)
         return True
     except:
         return False
+
+
+def calWat(sex, wSport, yearUser, weight, height, objective):
+    dWat = 0
+    dCal = 0
+    if sex == 'male':
+        dWat = 2800
+        dCal = int(66.5 + (13.75 * float(weight)) + (5 * int(height)) - (6.775 * int(yearUser)))
+    else:
+        dWat = 2000
+        dCal = int(65.5 + (9.563 * float(weight)) + (1.850 * int(height)) - (4.676 * int(yearUser)))
+
+    if wSport == 0:
+        dCal *= 1.2
+    else:
+        if wSport == 1 or wSport == 2:
+            dCal *= 1.375
+        else:
+            if wSport == 3 or wSport == 4:
+                dCal *= 1.50
+            else:
+                if wSport == 5:
+                    dCal *= 1.725
+                else:
+                    dCal *= 1.9
+    if objective == 'wLoss':
+        dCal -= (dCal * 17) / 100
+    if objective == 'wGain':
+        dCal += 500
+    return [dWat, dCal]

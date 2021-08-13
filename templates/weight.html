@@ -151,23 +151,7 @@
         function drawChart() {
             // Define the chart to be drawn.
             var data = new google.visualization.DataTable();
-            var data = google.visualization.arrayToDataTable([
-                ['Date','Weight'],
-                ['20/05/20',100],
-                ['21/05/20',95],
-                ['30/06/20',87],
-                ['31/06/20',79],
-                ['01/07/20',75],
-                ['02/07/20',150],
-                ['21/05/20',95],
-                ['30/06/20',87],
-                ['31/06/20',79],
-                ['01/07/20',75],
-                ['02/07/20',150],
-                ['21/05/20',95],
-                ['30/06/20',87],
-                ['01/07/20',75]
-            ]);
+            var data = google.visualization.arrayToDataTable({{weightArray|safe}});
 
             var options = {
                 explorer: {
