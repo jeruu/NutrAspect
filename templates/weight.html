@@ -82,10 +82,9 @@
       </div>
     </nav>
 
-
     <main class="container my-auto py-4 under-nav">
         <div class="row">
-            <div class="col-sm-12 col-md-5 text-center mx-auto bg-light bg-gradient my-4 pb-3">
+            <div class="col-sm-12 col-md-5 text-center mx-auto bg-light bg-gradient my-4 pb-3 px-2">
                 <h3 class="mt-3">Weight update</h3>
                 <form method="post">
                     <h5 class="my-3 fw-normal">Add your current Weight</h5>
@@ -96,7 +95,22 @@
                     </div>
                 </form>
             </div>
-            <div id="myPieChart" class="col-md-5 col-sm-12">
+
+            <div class="col-sm-12 col-md-5 text-center mx-auto bg-light bg-gradient my-4 pb-3">
+                <h3 class="mt-3">Current Weight</h3>
+                <h4>The last time you updated you weight, you weighed</h4>
+                <h4 id="currentWeight" name="currentWeight" style="display: inline-block">888</h4><h4 style="display: inline-block" class="text-reset lead"> Kg</h4>
+                <h5></h5>
+                <h5 style="display: inline-block" class="lead">Your goal weight is</h5>
+                <h5 id="idealWeight" name="idealWeight" style="display: inline-block">555</h5>
+                <h5 style="display: inline-block" class="lead">Kg. You've already lost</h5>
+                <h5 style="display:inline-block" id="lostKg" name="lostKg">333</h5>
+                <h5 style="display: inline-block" class="lead">Kg. Keep going!!</h5>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div id="myPieChart" style="height: 400px"></div>
+                </div>
             </div>
         </div>
     </main>
@@ -131,26 +145,41 @@
     <script src="../static/js/bootstrap.js"></script>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
-        google.charts.load('current', {packages: ['line']});
+        google.charts.load('current', {packages: ['corechart']});
         google.charts.setOnLoadCallback(drawChart);
 
         function drawChart() {
             // Define the chart to be drawn.
             var data = new google.visualization.DataTable();
             var data = google.visualization.arrayToDataTable([
-                ['Data','Peso'],
+                ['Date','Weight'],
                 ['20/05/20',100],
                 ['21/05/20',95],
                 ['30/06/20',87],
                 ['31/06/20',79],
                 ['01/07/20',75],
-                ['02/07/20',150]
+                ['02/07/20',150],
+                ['21/05/20',95],
+                ['30/06/20',87],
+                ['31/06/20',79],
+                ['01/07/20',75],
+                ['02/07/20',150],
+                ['21/05/20',95],
+                ['30/06/20',87],
+                ['01/07/20',75]
             ]);
 
             var options = {
-                title: 'Grafico del peso',
-                legend: { position: 'bottom' },
-                is3D: true
+                explorer: {
+                    actions: ['dragToZoom', 'rightClickToReset'],
+                    axis: 'horizontal',
+                    keepInBounds: false,
+                    maxZoomIn: 4.0,
+                    maxZoomOut:2
+                },
+                title: 'Weight chart',
+                chartArea: {'right':0,'width': '90%', 'height': '80%'},
+                curveType: 'function'
             };
 
           // Instantiate and draw the chart.
