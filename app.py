@@ -20,6 +20,7 @@ db = client['NutrAspect']
 users_collection = db['users']
 dailyWeight_collection = db['dailyWeight']
 dailyWater_collection = db['dailyWater']
+foodList_collection = db['foodList']
 
 
 # pagina per il login effettuato todo prove
@@ -48,6 +49,7 @@ def puliscituttooo():
 
 
 @app.route('/home', methods=['GET', 'POST'])
+@flask_login.login_required
 def homeProva():
     return render_template('home.html')
 
@@ -160,6 +162,7 @@ def registerProva():
 
 
 @app.route('/bodyComp', methods=['GET', 'POST'])
+@flask_login.login_required
 def bodyCompProva():
     weight = request.form.get('weight')
     height = request.form.get('height')
@@ -195,8 +198,20 @@ def bodyCompProva():
 
 
 @app.route('/foodSelector', methods=['GET', 'POST'])
+@flask_login.login_required
 def foodSelectorProva():
-    return render_template("foodSelector.html")
+    search = request.form.get('search')
+    gr = request.form.get('gr')
+    food = []
+    if search is not None:
+        foodQr = foodList_collection.find({'name': search})
+    else:
+        foodQr = foodList_collection.find()
+
+    for x in foodQr:
+        food.append([x["name"], x["cal"], x["protein"], x["fat"]])
+
+    return render_template("foodSelector.html", foodArr=food)
 
 
 @app.route('/protected/weight', methods=['GET', 'POST'])
@@ -229,12 +244,12 @@ if __name__ == '__main__':
 
 
 @app.route('/water', methods=['GET', 'POST'])
+@flask_login.login_required
 def waterprova():
     water = request.form.get('mlwater')
     reset = request.form.get('reset')
     racml = users_collection.find_one({'email': flask_login.current_user.id})["dWat"]
     todayml = 0
-
 
     try:
         todayml = \
@@ -253,6 +268,28 @@ def waterprova():
         dailyWater_collection.delete_one({'userEmail': flask_login.current_user.id, 'day': todayDate()})
 
     return render_template('water.html', todayml=todayml, racml=racml)
+
+
+@app.route('/profile')
+@flask_login.login_required
+def profileprova():
+    return render_template('profile.html')
+
+
+@app.route('/addFood', methods=['GET', 'POST'])
+@flask_login.login_required
+def addFoodProva():
+    name = request.form.get('foodName')
+    cal = request.form.get('foodCarbs')
+    protein = request.form.get('foodProt')
+    fat = request.form.get('foodFat')
+    validate = 0
+    try:
+        foodList_collection.insert_one(
+            {'name': name, 'cal': int(cal), 'protein': int(protein), 'fat': int(fat), 'validate': False})
+    except:
+        return render_template('addFood.html')
+    return render_template('addFood.html')
 
 
 def yearToday(bDate):
