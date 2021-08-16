@@ -202,6 +202,7 @@ def bodyCompProva():
 def foodSelectorProva():
     search = request.form.get('search')
     gr = request.form.get('gr')
+    foodName = request.form.get('foodName')
     food = []
     if search is not None:
         foodQr = foodList_collection.find({'name': search})

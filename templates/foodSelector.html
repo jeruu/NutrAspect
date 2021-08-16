@@ -93,7 +93,7 @@
 
                         {% block title %}
                             {% for food in foodArr %}
-                                     <li class="border-bottom pt-2" onclick='addName("{{ food [0] }}")'>
+                                     <li class="border-bottom pt-2" onclick='addName("{{ food[0] }}")'>
                                         <h4>{{ food[0] }}</h4>
                                         <p class="nutritional-info pb-0">100 gr: {{ food[1] }} cal {{ food[2] }} protein {{ food[3] }} fat </p>
                                     </li>
@@ -104,7 +104,7 @@
             </div>
             <div class="col-sm-12 col-md-5 text-center mx-auto bg-light bg-gradient">
                 <form method="post">
-                    <input class="d-none" id="fname">
+                    <input class="d-none" id="fname" name="foodName" value="diopoerco">
                     <p id="food-name" class="fw-bold mt-2" name="Food Name">Food Name</p>
                     <p class="text-primary fw-bold mt-2">How much?</p>
                     <div class="input-group mb-3 align-self-center mx-auto mt-2" style="width:50%" >
@@ -149,18 +149,10 @@
 
 
     <script>
-        //var listItems = document.querySelectorAll('.matching li');
-        var name = document.getElementById("fname")
-
-        /**listItems.forEach((item, index) => {
-          item.addEventListener('click', (event) => {
-            name.value = ${event.currentTarget.innerHTML};
-          });
-        });
-        **/
 
         function addName(value){
-            name.value = value;
+            document.getElementById("fname").value = value;
+            alert(value)
         }
 
     </script>
