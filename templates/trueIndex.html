@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NutrAspect</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/favicons/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicons/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicons/favicon-16x16.png') }}">
+    <link rel="mask-icon" href="{{ url_for('static', filename='images/favicons/safari-pinned-tab.svg') }}" color="#5bbad5">
+    <link rel="manifest" href="{{ url_for('static', filename='images/favicons/site.webmanifest') }}">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+</head>
+<body style="background-color: #fcfcfc">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold mb-2" href="#">
+                <img src="{{ url_for('static', filename='images/favicons/logo.svg') }}" alt="" width="30" height="30" class="d-inline-block align-text-top">
+                NutrAspect</a>
+            <div class="d-flex">
+                <a href="../login" class="btn btn-light me-2">Login</a>
+                <a href="../register" class="btn btn-light">Register</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-auto py-4 under-nav">
+        <div style="padding:128px 16px" class="bg-light">
+            <h1 class="my-5">Your personal journey, starts here.</h1>
+            <h4 class="my-5 lead h4">Stop wasting your valuable time. Start using NutrAspect to keep your body values in check and you will never stop using it</h4>
+            <a class="btn btn-outline-primary btn-lg my-3" href="../register">
+                <img src="{{ url_for('static', filename='images/favicons/blue-logo.svg') }}" alt="" width="30" height="30" class="d-inline-block align-text-top">
+                Start Today</a>
+        </div>
+        <div style="padding:128px 16px">
+            <h3 class="text-center my-4">About NutrAspect</h3>
+            <p class="text-center lead my-4">Key features of our web-app</p>
+            <div class="row">
+                <div class="col-3-md col-sm-6 text-center">
+                    <i class="fas fa-desktop fa-5x"></i>
+                    <p class="fs-3 my-4">Responsive</p>
+                    <p class="pb-4 lead">Built to work on all kind of devices, from your laptop to your smartphone, from your desktop to your smart-fridge.</p>
+                </div>
+                <div class="col-3-md col-sm-6 text-center">
+                    <i class="fas fa-heart fa-5x"></i>
+                    <p class="fs-3 my-4">Passion</p>
+                    <p class="pb-4 lead">We care about our product and our consumers, above all because we too are.</p>
+                </div>
+                <div class="col-3-md col-sm-6 text-center">
+                    <i class="fas fa-gem fa-5x"></i>
+                    <p class="fs-3 my-4">Design</p>
+                    <p class="pb-4 lead">Built using professional tools to assure the best modern-looking interface, from whatever device you are using</p>
+                </div>
+                <div class="col-3-md col-sm-6 text-center">
+                    <i class="fab fa-github fa-5x"></i>
+                    <p class="fs-3 my-4">Open-Source</p>
+                    <p class="pb-4 lead">NutrAspect is completely free and open-source, you can change its source code and distribute your changes</p>
+                </div>
+            </div>
+        </div>
+        <div style="padding:128px 16px">
+            <h3 class="text-center my-4">The team</h3>
+            <p class="text-center lead my-4">The ones that run NutrAspect</p>
+            <div class="row d-flex justify-content-center">
+                <div class="card col-5 bg-light my-3 mx-2 shadow" style="width: 18rem;">
+                    <i class="fas fa-user fa-5x text-center my-4"></i>
+                    <div class="card-body text-center">
+                        <h5 class="card-title lead h5 fw-bold mx-4">Porcelli Fabio</h5>
+                        <h3 class="lead h3">0124001895</h3>
+                    </div>
+                </div>
+
+                <div class="card col-5 bg-light my-3 mx-2 shadow" style="width: 18rem;">
+                    <i class="fas fa-user fa-5x text-center my-4"></i>
+                    <div class="card-body text-center">
+                        <h5 class="card-title lead h5 fw-bold mx-4">Sannino Ciro</h5>
+                        <h3 class="lead h3">0124001948</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!--
+    ----FOOTER DELLA PAGINA----
+    #todo mettere il link github e altre info del progetto
+    -->
+    <footer class="bd-footer py-5 mt-5 bg-light">
+      <div class="container py-5">
+        <div class="row">
+          <div class="col-6 col-lg-2 offset-lg-1 mb-3">
+            <h5>Links</h5>
+            <ul class="list-unstyled">
+              <li class="mb-2"><a href="/">Home</a></li>
+            </ul>
+          </div>
+          <div class="col-6 col-lg-2 mb-3">
+            <h5>Projects</h5>
+            <ul class="list-unstyled">
+              <li class="mb-2"><a href="https://github.com/twbs/bootstrap">Bootstrap 5</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../static/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="../static/js/bootstrap.js"></script>
+
+</body>
+</html>
