@@ -91,7 +91,7 @@
             <div class="col-sm-12 col-md-5 mx-auto">
                 <ul id="matching">
 
-                        {% block title %}
+                        {% block foodBlook %}
                             {% for food in foodArr %}
                                      <li class="border-bottom pt-2" onclick='addName("{{ food[0] }}")'>
                                         <h4>{{ food[0] }}</h4>
@@ -112,7 +112,7 @@
                       <span class="input-group-text" id="basic-addon2">gr</span>
                     </div>
                     <p class="text-primary fw-bold mt-2">To which meal?</p>
-                    <select class="form-select mb-4 mt-2 mx-auto" aria-label="Select meal" style="width: 50%">
+                    <select class="form-select mb-4 mt-2 mx-auto" aria-label="Select meal" style="width: 50%" name="meal">
                       <option value="Breakfast" selected>Breakfast</option>
                       <option value="Launch">Launch</option>
                       <option value="Dinner">Dinner</option>
@@ -152,7 +152,6 @@
 
         function addName(value){
             document.getElementById("fname").value = value;
-            alert(value)
         }
 
     </script>

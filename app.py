@@ -21,6 +21,7 @@ users_collection = db['users']
 dailyWeight_collection = db['dailyWeight']
 dailyWater_collection = db['dailyWater']
 foodList_collection = db['foodList']
+dailyFood_collection = db['dailyFood']
 
 
 # pagina per il login effettuato todo prove
@@ -51,7 +52,20 @@ def puliscituttooo():
 @app.route('/home', methods=['GET', 'POST'])
 @flask_login.login_required
 def homeProva():
-    return render_template('home.html')
+    dailyMeal = dailyFood_collection.find_one({'userEmail': flask_login.current_user.id, 'day': todayDate()})
+
+    foodArrBreakfast = foodArrDump(dailyMeal, 'Breakfast')
+    foodArrLaunch = foodArrDump(dailyMeal, 'Launch')
+    foodArrDinner = foodArrDump(dailyMeal, 'Dinner')
+    foodArrSnacks = foodArrDump(dailyMeal, 'Snacks')
+
+    # TODO
+    # for food in  foodArrBreakfast
+    #    dailySummary+=
+
+    print(foodArrLaunch)
+    return render_template('home.html', foodArrBreakfast=foodArrBreakfast, foodArrLaunch=foodArrLaunch,
+                           foodArrDinner=foodArrDinner, foodArrSnacks=foodArrSnacks)
 
 
 # franc
@@ -203,6 +217,8 @@ def foodSelectorProva():
     search = request.form.get('search')
     gr = request.form.get('gr')
     foodName = request.form.get('foodName')
+    meal = request.form.get('meal')
+    mealTemp = []
     food = []
     if search is not None:
         foodQr = foodList_collection.find({'name': search})
@@ -211,6 +227,18 @@ def foodSelectorProva():
 
     for x in foodQr:
         food.append([x["name"], x["cal"], x["protein"], x["fat"]])
+
+    if foodName is not None and gr is not None:
+        try:
+            mealTemp = dailyFood_collection.find_one({'userEmail': flask_login.current_user.id, 'day': todayDate()})[
+                meal]
+            mealTemp.append([foodName, gr])
+            dailyFood_collection.update_one({'userEmail': flask_login.current_user.id, 'day': todayDate()},
+                                            {"$set": {meal: mealTemp}})
+        except:
+            mealTemp.append([foodName, gr])
+            dailyFood_collection.insert_one(
+                {'userEmail': flask_login.current_user.id, 'day': todayDate(), meal: mealTemp})
 
     return render_template("foodSelector.html", foodArr=food)
 
@@ -293,6 +321,11 @@ def addFoodProva():
     return render_template('addFood.html')
 
 
+@app.route('/admin')
+def adminProva():
+    return render_template('admin.html', foodArr=[['pollo', 10, 10, 10]])
+
+
 def yearToday(bDate):
     today = datetime.datetime.today()
     if bDate.month <= today.month:
@@ -342,3 +375,19 @@ def calWat(sex, wSport, yearUser, weight, height, objective):
     if objective == 'wGain':
         dCal += 500
     return [dWat, dCal]
+
+
+def foodArrDump(dailyMeal, meal):
+    foodArr = []
+    try:
+        dailyMeal[meal]
+    except:
+        return foodArr
+    for food in dailyMeal[meal]:
+        qr = foodList_collection.find({'name': food[0]})
+        for x in qr:
+            foodArr.append(
+                [x["name"], food[1], int((x["cal"] / 100) * float(food[1])), int((x["protein"] / 100) * float(food[1])),
+                 int((x["fat"] / 100) * float(food[1]))])
+
+    return foodArr

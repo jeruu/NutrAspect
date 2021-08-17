@@ -170,19 +170,22 @@
                           <th scope="col">Food</th>
                           <th scope="col">Quantity</th>
                           <th scope="col">Calories</th>
+                          <th scope="col">Protein</th>
+                          <th scope="col">Fat</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <th scope="row">Banana</th>
-                          <td>120 gr.</td>
-                          <td>180</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">Riso</th>
-                          <td>80 gr.</td>
-                          <td>150</td>
-                        </tr>
+                      {% block foodBreakfastBlock %}
+                            {% for food in foodArrBreakfast %}
+                                <tr>
+                                    <th scope="row">{{ food[0] }}</th>
+                                    <td>{{ food[1] }} gr</td>
+                                    <td>{{ food[2] }}</td>
+                                    <td>{{ food[3] }}</td>
+                                    <td>{{ food[4] }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endblock %}
                       </tbody>
                     </table>
                 </div>
@@ -196,19 +199,22 @@
                           <th scope="col">Food</th>
                           <th scope="col">Quantity</th>
                           <th scope="col">Calories</th>
+                          <th scope="col">Protein</th>
+                          <th scope="col">Fat</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <th scope="row">Banana</th>
-                          <td>120 gr.</td>
-                          <td>180</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">Riso</th>
-                          <td>80 gr.</td>
-                          <td>150</td>
-                        </tr>
+                      {% block foodLaunchBlook %}
+                            {% for food in foodArrLaunch %}
+                                <tr>
+                                    <th scope="row">{{ food[0] }}</th>
+                                    <td>{{ food[1] }} gr</td>
+                                    <td>{{ food[2] }}</td>
+                                    <td>{{ food[3] }}</td>
+                                    <td>{{ food[4] }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endblock %}
                       </tbody>
                     </table>
                 </div>
@@ -224,19 +230,22 @@
                           <th scope="col">Food</th>
                           <th scope="col">Quantity</th>
                           <th scope="col">Calories</th>
+                          <th scope="col">Protein</th>
+                          <th scope="col">Fat</th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <tr>
-                          <th scope="row">Banana</th>
-                          <td>120 gr.</td>
-                          <td>180</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">Riso</th>
-                          <td>80 gr.</td>
-                          <td>150</td>
-                        </tr>
+                    <tbody>
+                      {% block foodDinnerBlook %}
+                            {% for food in foodArrDinner %}
+                                <tr>
+                                    <th scope="row">{{ food[0] }}</th>
+                                    <td>{{ food[1] }} gr</td>
+                                    <td>{{ food[2] }}</td>
+                                    <td>{{ food[3] }}</td>
+                                    <td>{{ food[4] }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endblock %}
                       </tbody>
                     </table>
                 </div>
@@ -250,19 +259,22 @@
                           <th scope="col">Food</th>
                           <th scope="col">Quantity</th>
                           <th scope="col">Calories</th>
+                          <th scope="col">Protein</th>
+                          <th scope="col">Fat</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <th scope="row">Banana</th>
-                          <td>120 gr.</td>
-                          <td>180</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">Riso</th>
-                          <td>80 gr.</td>
-                          <td>150</td>
-                        </tr>
+                      {% block foodSnacksBlock %}
+                            {% for food in foodArrSnacks %}
+                                <tr>
+                                    <th scope="row">{{ food[0] }}</th>
+                                    <td>{{ food[1] }} gr</td>
+                                    <td>{{ food[2] }}</td>
+                                    <td>{{ food[3] }}</td>
+                                    <td>{{ food[4] }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endblock %}
                       </tbody>
                     </table>
                 </div>
