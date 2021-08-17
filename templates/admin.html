@@ -51,7 +51,6 @@
                         {% for food in foodArr %}
                             <li class="border-bottom pt-2" onclick='addName("{{ food[0] }}")'>
                                 <h4>{{ food[0] }}</h4>
-                                <p class="nutritional-info pb-0">100 gr: {{ food[1] }} cal {{ food[2] }} protein {{ food[3] }} fat </p>
                                 <form>
                                     <button type="submit" name="verified" class="btn btn-success ms-5">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
@@ -64,6 +63,7 @@
                                         </svg>
                                     </button>
                                 </form>
+                                <p class="nutritional-info pb-0">100 gr: {{ food[1] }} cal {{ food[2] }} protein {{ food[3] }} fat </p>
                             </li>
                         {% endfor %}
                     {% endblock %}
