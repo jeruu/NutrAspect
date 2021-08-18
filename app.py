@@ -104,7 +104,7 @@ def homeProva():
     dailySummary.append(['Proteins', protTemp, protTot, int((protTemp * 100) / protTot)])
     dailySummary.append(['Fats', fatTemp, fatTot, int((fatTemp * 100) / fatTot)])
 
-    chartArr=[]
+    chartArr=[['Macro', 'Quantity']]
     chartArr.append(['Carbohydrates', int((carbTemp * 100) / carbTot)])
     chartArr.append(['Proteins', int((protTemp * 100) / protTot)])
     chartArr.append(['Fats', int((fatTemp * 100) / fatTot)])
