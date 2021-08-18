@@ -95,9 +95,9 @@ def homeProva():
         fatTemp += food[5]
 
     calD = int(users_collection.find_one({'email': flask_login.current_user.id})['dCal'])
-    carbTot = calD * carbCoeff
-    protTot = calD * protCoeff
-    fatTot = calD * fatCoeff
+    carbTot = int(calD * carbCoeff)
+    protTot = int(calD * protCoeff)
+    fatTot = int(calD * fatCoeff)
 
     dailySummary.append(['Calories', calTemp, calD, int((calTemp * 100) / calD)])
     dailySummary.append(['Carbohydrates', carbTemp, carbTot, int((carbTemp * 100) / carbTot)])
