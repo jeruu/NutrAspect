@@ -129,32 +129,19 @@
                           <th scope="col">Reached Daily</th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <tr>
-                          <th scope="row">Calories</th>
-                          <td>900</td>
-                          <td>1800</td>
-                          <td>50%</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">Carbs</th>
-                          <td>900</td>
-                          <td>1800</td>
-                          <td>50%</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">Proteins</th>
-                          <td>900</td>
-                          <td>1800</td>
-                          <td>50%</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">Fats</th>
-                          <td>900</td>
-                          <td>1800</td>
-                          <td>50%</td>
-                        </tr>
-                      </tbody>
+                    <tbody>
+                      {% block dailyBlock %}
+                            {% for daily in dailySummary %}
+                                <tr>
+                                    <th scope="row">{{ daily[0] }}</th>
+                                    <td>{{ daily[1] }}</td>
+                                    <td>{{ daily[2] }}</td>
+                                    <td>{{ daily[3] }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endblock %}
+                    </tbody>
+
                     </table>
                 </div>
             </div>
@@ -265,7 +252,7 @@
                       </thead>
                       <tbody>
                       {% block foodSnacksBlock %}
-                            {% for food in foodArrSnacks %}
+                            {% for food in foodArrSnack %}
                                 <tr>
                                     <th scope="row">{{ food[0] }}</th>
                                     <td>{{ food[1] }} gr</td>

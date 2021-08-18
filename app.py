@@ -53,20 +53,60 @@ def puliscituttooo():
 @flask_login.login_required
 def homeProva():
     dailyMeal = dailyFood_collection.find_one({'userEmail': flask_login.current_user.id, 'day': todayDate()})
-    dailySummary = [0, 0, 0, 0]
+    dailySummary = []
+
+    calTemp = 0
+    carbTemp = 0
+    protTemp = 0
+    fatTemp = 0
+
+    carbCoeff = .4 / 4
+    protCoeff = .3 / 4
+    fatCoeff = .3 / 9
 
     foodArrBreakfast = foodArrDump(dailyMeal, 'Breakfast')
     foodArrLaunch = foodArrDump(dailyMeal, 'Launch')
     foodArrDinner = foodArrDump(dailyMeal, 'Dinner')
-    foodArrSnacks = foodArrDump(dailyMeal, 'Snacks')
-    foodArrSnacks = [-10, -10, 1, 5, 10, 20]
-    # TODO
-    for i in range(4):
-        dailySummary[i] += foodArrSnacks[i + 2]
+    foodArrSnack = foodArrDump(dailyMeal, 'Snack')
 
-    print(dailySummary)
+    # TODO
+    for food in foodArrBreakfast:
+        calTemp += food[2]
+        carbTemp += food[3]
+        protTemp += food[4]
+        fatTemp += food[5]
+
+    for food in foodArrLaunch:
+        calTemp += food[2]
+        carbTemp += food[3]
+        protTemp += food[4]
+        fatTemp += food[5]
+
+    for food in foodArrDinner:
+        calTemp += food[2]
+        carbTemp += food[3]
+        protTemp += food[4]
+        fatTemp += food[5]
+
+    for food in foodArrSnack:
+        calTemp += food[2]
+        carbTemp += food[3]
+        protTemp += food[4]
+        fatTemp += food[5]
+
+    calD = int(users_collection.find_one({'email': flask_login.current_user.id})['dCal'])
+    carbTot = calD * carbCoeff
+    protTot = calD * protCoeff
+    fatTot = calD * fatCoeff
+
+    dailySummary.append(['Calories', calTemp, calD, int((calTemp * 100) / calD)])
+    dailySummary.append(['Carbohydrates', carbTemp, carbTot, int((carbTemp * 100) / carbTot)])
+    dailySummary.append(['Proteins', protTemp, protTot, int((protTemp * 100) / protTot)])
+    dailySummary.append(['Fats', fatTemp, fatTot, int((fatTemp * 100) / fatTot)])
+
+    print(foodArrSnack)
     return render_template('home.html', foodArrBreakfast=foodArrBreakfast, foodArrLaunch=foodArrLaunch,
-                           foodArrDinner=foodArrDinner, foodArrSnacks=foodArrSnacks)
+                           foodArrDinner=foodArrDinner, foodArrSnack=foodArrSnack, dailySummary=dailySummary)
 
 
 # franc
@@ -230,17 +270,19 @@ def foodSelectorProva():
         food.append([x["name"], x["cal"], x["carb"], x["protein"], x["fat"]])
 
     if foodName is not None and gr is not None:
-        try:
-            mealTemp = dailyFood_collection.find_one({'userEmail': flask_login.current_user.id, 'day': todayDate()})[
-                meal]
-            mealTemp.append([foodName, gr])
+        if dailyFood_collection.find_one({'userEmail': flask_login.current_user.id, 'day': todayDate()}) is not None:
+            try:
+                mealTemp = dailyFood_collection.find_one({'userEmail': flask_login.current_user.id, 'day': todayDate()})[meal]
+                mealTemp.append([foodName, gr])
+            except:
+                mealTemp.append([foodName, gr])
+
             dailyFood_collection.update_one({'userEmail': flask_login.current_user.id, 'day': todayDate()},
                                             {"$set": {meal: mealTemp}})
-        except:
-            mealTemp.append([foodName, gr])
-            dailyFood_collection.insert_one(
-                {'userEmail': flask_login.current_user.id, 'day': todayDate(), meal: mealTemp})
-
+    else:
+        dailyFood_collection.insert_one(
+            {'userEmail': flask_login.current_user.id, 'day': todayDate(), meal: mealTemp})
+    [meal]
     return render_template("foodSelector.html", foodArr=food)
 
 
@@ -317,7 +359,8 @@ def addFoodProva():
     validate = False
     try:
         foodList_collection.insert_one(
-            {'name': name, 'cal': int(cal), 'carb' : int(carb), 'protein': int(protein), 'fat': int(fat), 'validate': validate})
+            {'name': name, 'cal': int(cal), 'carb': int(carb), 'protein': int(protein), 'fat': int(fat),
+             'validate': validate})
     except:
         return render_template('addFood.html')
     return render_template('addFood.html')
@@ -387,9 +430,10 @@ def foodArrDump(dailyMeal, meal):
         return foodArr
     for food in dailyMeal[meal]:
         qr = foodList_collection.find({'name': food[0]})
+        grCf = int(food[1]) / 100
         for x in qr:
             foodArr.append(
-                [x["name"], food[1], int((x["cal"] / 100) * float(food[1])), int((x["carb"] / 100) * float(food[1])), int((x["protein"] / 100) * float(food[1])),
-                 int((x["fat"] / 100) * float(food[1]))])
-
+                [x["name"], food[1], int((x["cal"] * grCf)), int((x["carb"] * grCf)), int((x["protein"] * grCf)),
+                 int((x["fat"] * grCf))])
+            # int((x["fat"] / 100) * float(food[1]))
     return foodArr
