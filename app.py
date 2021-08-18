@@ -53,17 +53,18 @@ def puliscituttooo():
 @flask_login.login_required
 def homeProva():
     dailyMeal = dailyFood_collection.find_one({'userEmail': flask_login.current_user.id, 'day': todayDate()})
+    dailySummary = [0, 0, 0, 0]
 
     foodArrBreakfast = foodArrDump(dailyMeal, 'Breakfast')
     foodArrLaunch = foodArrDump(dailyMeal, 'Launch')
     foodArrDinner = foodArrDump(dailyMeal, 'Dinner')
     foodArrSnacks = foodArrDump(dailyMeal, 'Snacks')
-
+    foodArrSnacks = [-10, -10, 1, 5, 10, 20]
     # TODO
-    # for food in  foodArrBreakfast
-    #    dailySummary+=
+    for i in range(4):
+        dailySummary[i] += foodArrSnacks[i + 2]
 
-    print(foodArrLaunch)
+    print(dailySummary)
     return render_template('home.html', foodArrBreakfast=foodArrBreakfast, foodArrLaunch=foodArrLaunch,
                            foodArrDinner=foodArrDinner, foodArrSnacks=foodArrSnacks)
 
@@ -226,7 +227,7 @@ def foodSelectorProva():
         foodQr = foodList_collection.find()
 
     for x in foodQr:
-        food.append([x["name"], x["cal"], x["protein"], x["fat"]])
+        food.append([x["name"], x["cal"], x["carb"], x["protein"], x["fat"]])
 
     if foodName is not None and gr is not None:
         try:
@@ -309,13 +310,14 @@ def profileprova():
 @flask_login.login_required
 def addFoodProva():
     name = request.form.get('foodName')
-    cal = request.form.get('foodCarbs')
+    cal = request.form.get('foodCal')
+    carb = request.form.get('foodCarb')
     protein = request.form.get('foodProt')
     fat = request.form.get('foodFat')
-    validate = 0
+    validate = False
     try:
         foodList_collection.insert_one(
-            {'name': name, 'cal': int(cal), 'protein': int(protein), 'fat': int(fat), 'validate': False})
+            {'name': name, 'cal': int(cal), 'carb' : int(carb), 'protein': int(protein), 'fat': int(fat), 'validate': validate})
     except:
         return render_template('addFood.html')
     return render_template('addFood.html')
@@ -387,7 +389,7 @@ def foodArrDump(dailyMeal, meal):
         qr = foodList_collection.find({'name': food[0]})
         for x in qr:
             foodArr.append(
-                [x["name"], food[1], int((x["cal"] / 100) * float(food[1])), int((x["protein"] / 100) * float(food[1])),
+                [x["name"], food[1], int((x["cal"] / 100) * float(food[1])), int((x["carb"] / 100) * float(food[1])), int((x["protein"] / 100) * float(food[1])),
                  int((x["fat"] / 100) * float(food[1]))])
 
     return foodArr
