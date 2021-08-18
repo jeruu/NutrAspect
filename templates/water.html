@@ -83,6 +83,14 @@
     <main class="container my-auto py-4 under-nav">
         <div class="row my-2">
             <h2 class="py-3">Water Consumption</h2>
+            <div class="alert alert-success d-flex align-items-center mx-3 d-none" role="alert" id="waterSuccess">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+              </svg>
+              <div>
+                  Water added with success
+              </div>
+            </div>
             <div class="col-sm-12 col-md-5 mx-auto">
                 <h4 style="display: inline">Today's Water Total</h4>
                 <h4 style="display: inline" class="text-decoration-underline ps-5">{{ todayml }} ml</h4>
