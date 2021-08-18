@@ -73,15 +73,20 @@ sbody {
 }
 
 .form-datasin input[type="weight"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 .form-datasin input[type="height"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+    margin-bottom: -1px;
+    border-radius: 0;
+}
+
+.form-datasin input[type="gweight"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }
 
 .form-signin input[type="Date"] {
