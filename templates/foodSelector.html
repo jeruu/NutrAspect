@@ -101,7 +101,7 @@
 
                         {% block foodBlook %}
                             {% for food in foodArr %}
-                                     <li class="border-bottom pt-2" onclick='addName("{{ food[0] }}")'>
+                                     <li class="border-bottom pt-2" id="{{ food[0] }}" onclick="clicked('{{ food[0] }}')">
                                         <h4>{{ food[0] }}</h4>
                                         <p class="nutritional-info pb-0">100 gr: {{ food[1] }} cal {{ food[2] }} carb {{ food[3] }} protein {{ food[4] }} fat </p>
                                     </li>
@@ -158,8 +158,25 @@
 
     <script>
 
+        let clicked = false;
+        let el;
+
         function addName(value){
             document.getElementById("fname").value = value;
+        }
+
+        function clicked(id){
+            addName(id);
+            if (!clicked) {
+                el=document.getElementById(id);
+                el.classList.add('clicked');;
+                clicked=true;
+            }
+            else{
+                el.classList.remove('clicked');
+                el=document.getElementById(id);
+                el.classList.add('clicked');
+            }
         }
 
     </script>
