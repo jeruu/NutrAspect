@@ -327,7 +327,7 @@
         }
     </script>
     <script type="text/javascript">
-        google.charts.load('current', {'packages':['corechart']});
+        google.charts.load('current', {packages:['corechart']});
         google.charts.setOnLoadCallback(drawChart);
 
         function drawChart() {
@@ -335,10 +335,10 @@
             var data = google.visualization.arrayToDataTable({{ chartArr|safe }});
 
             var options = {
-                title: 'My Daily Activities',
+                title: 'My Daily Macro Consumption',
                 chartArea: {'width': '100%', 'height': '80%'},
                 backgroundColor: 'transparent',
-                pieHole: 0.4
+                pieHole: 0.3
             };
 
             var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
