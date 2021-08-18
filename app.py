@@ -196,6 +196,7 @@ def registerProva():
     dCal = 0
     dWat = 0
     objective = 'todo'
+    objectiveW = 0
     permission = 0
 
     if email is not None:
@@ -207,7 +208,7 @@ def registerProva():
                 raise
             insQuery = {"email": email, "password": password, "name": name, "surname": surname, "sex": sex,
                         "bDate": bDate,
-                        "height": height, 'objective': objective, 'dCal': dCal, 'dWat': dWat, "wSport": wSport,
+                        "height": height, 'objective': objective, 'objectiveW': objectiveW, 'dCal': dCal, 'dWat': dWat, "wSport": wSport,
                         "permission": permission}
             users_collection.insert_one(insQuery)
         except:
@@ -228,13 +229,13 @@ def bodyCompProva():
     height = request.form.get('height')
     sex = request.form.get('sexRadio')
     wSport = request.form.get('wSport')
+    objectiveW = request.form.get('objectiveW')
 
     objective = request.form.get('wRadio')
 
     dCal = 0
     dWat = 0
     if dailyWeight_collection.find_one({'userEmail': flask_login.current_user.id}) is None:
-        yearUser = yearToday(users_collection.find_one({'email': flask_login.current_user.id})['bDate'])
         try:
             yearUser = yearToday(users_collection.find_one({'email': flask_login.current_user.id})['bDate'])
             [dWat, dCal] = calWat(sex, int(wSport), yearUser, weight, height, objective)
@@ -248,7 +249,7 @@ def bodyCompProva():
                 {'weight': float(weight), 'day': todayDate(), 'userEmail': flask_login.current_user.id})
             users_collection.update_one({'email': flask_login.current_user.id},
                                         {"$set": {'height': int(height), 'sex': sex, 'wSport': int(wSport),
-                                                  'dWat': dWat, 'dCal': dCal, 'objective': objective}})
+                                                  'dWat': dWat, 'dCal': dCal, 'objective': objective, 'objectiveW': int(objectiveW)}})
             return redirect('/home')
         except Exception as e:
             print(e)
