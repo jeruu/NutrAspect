@@ -104,9 +104,14 @@ def homeProva():
     dailySummary.append(['Proteins', protTemp, protTot, int((protTemp * 100) / protTot)])
     dailySummary.append(['Fats', fatTemp, fatTot, int((fatTemp * 100) / fatTot)])
 
+    chartArr=[]
+    chartArr.append(['Carbohydrates', int((carbTemp * 100) / carbTot)])
+    chartArr.append(['Proteins', int((protTemp * 100) / protTot)])
+    chartArr.append(['Fats', int((fatTemp * 100) / fatTot)])
+
     print(foodArrSnack)
     return render_template('home.html', foodArrBreakfast=foodArrBreakfast, foodArrLaunch=foodArrLaunch,
-                           foodArrDinner=foodArrDinner, foodArrSnack=foodArrSnack, dailySummary=dailySummary)
+                           foodArrDinner=foodArrDinner, foodArrSnack=foodArrSnack, dailySummary=dailySummary, chartArr=chartArr)
 
 
 # franc
@@ -261,28 +266,29 @@ def foodSelectorProva():
     meal = request.form.get('meal')
     mealTemp = []
     food = []
+
     if search is not None:
         foodQr = foodList_collection.find({'name': search})
     else:
         foodQr = foodList_collection.find()
-
     for x in foodQr:
         food.append([x["name"], x["cal"], x["carb"], x["protein"], x["fat"]])
+
 
     if foodName is not None and gr is not None:
         if dailyFood_collection.find_one({'userEmail': flask_login.current_user.id, 'day': todayDate()}) is not None:
             try:
                 mealTemp = dailyFood_collection.find_one({'userEmail': flask_login.current_user.id, 'day': todayDate()})[meal]
-                mealTemp.append([foodName, gr])
             except:
-                mealTemp.append([foodName, gr])
+                pass
 
+            mealTemp.append([foodName, gr])
             dailyFood_collection.update_one({'userEmail': flask_login.current_user.id, 'day': todayDate()},
                                             {"$set": {meal: mealTemp}})
-    else:
-        dailyFood_collection.insert_one(
-            {'userEmail': flask_login.current_user.id, 'day': todayDate(), meal: mealTemp})
-    [meal]
+        else:
+            dailyFood_collection.insert_one(
+                {'userEmail': flask_login.current_user.id, 'day': todayDate(), meal: mealTemp})
+
     return render_template("foodSelector.html", foodArr=food)
 
 

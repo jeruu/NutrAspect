@@ -112,7 +112,7 @@
             </div>
             <div class="col-sm-12 col-md-5 text-center mx-auto bg-light bg-gradient">
                 <form method="post">
-                    <input class="d-none" id="fname" name="foodName" value="diopoerco">
+                    <input class="d-none" id="fname" name="foodName" value="">
                     <p id="food-name" class="fw-bold mt-2" name="Food Name">Food Name</p>
                     <p class="text-primary fw-bold mt-2">How much?</p>
                     <div class="input-group mb-3 align-self-center mx-auto mt-2" style="width:50%" >
@@ -156,10 +156,11 @@
     </footer>
 
 
-    <script>
 
-        let clicked = false;
-        let el;
+    <script src="../static/js/main.js"></script>
+        <script>
+
+        let el=null;
 
         function addName(value){
             document.getElementById("fname").value = value;
@@ -167,20 +168,16 @@
 
         function clicked(id){
             addName(id);
-            if (!clicked) {
-                el=document.getElementById(id);
-                el.classList.add('clicked');;
-                clicked=true;
-            }
-            else{
+
+            if (el != null) {
                 el.classList.remove('clicked');
-                el=document.getElementById(id);
-                el.classList.add('clicked');
             }
+            el=document.getElementById(id);
+            el.classList.add('clicked');
+
         }
 
     </script>
-    <script src="../static/js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="../static/js/bootstrap.js"></script>
 
