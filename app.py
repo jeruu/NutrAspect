@@ -105,9 +105,20 @@ def homeProva():
     dailySummary.append(['Fats', fatTemp, fatTot, int((fatTemp * 100) / fatTot)])
 
     chartArr = [['Macro', 'Quantity']]
-    chartArr.append(['Carbohydrates', int((carbTemp * 100) / carbTot)])
-    chartArr.append(['Proteins', int((protTemp * 100) / protTot)])
-    chartArr.append(['Fats', int((fatTemp * 100) / fatTot)])
+
+    carbP = int((carbTemp * 100) / carbTot)
+    if carbP == 0:
+        carbP = 1
+    protP = int((protTemp * 100) / protTot)
+    if protP == 0:
+        protP = 1
+    fatP = int((fatTemp * 100) / fatTot)
+    if fatP == 0:
+        fatP = 1
+
+    chartArr.append(['Carbohydrates', carbP])
+    chartArr.append(['Proteins', protP])
+    chartArr.append(['Fats', fatP])
 
     print(foodArrSnack)
     return render_template('home.html', foodArrBreakfast=foodArrBreakfast, foodArrLaunch=foodArrLaunch,
@@ -301,18 +312,18 @@ def foodSelectorProva():
 def weightProva():
     import html
     weight = request.form.get('weight')
-    chartData = [['Date', 'Weight']]
+    chartData = [['Date', 'Weight', 'Goal Weight']]
+    userId = users_collection.find_one({'email': flask_login.current_user.id})
     if weight is not None:
-        userId = users_collection.find_one({'email': flask_login.current_user.id})
         dailyWeight_collection.insert_one(
             {'weight': float(weight), 'day': todayDate(), 'userEmail': flask_login.current_user.id})
 
     rec = dailyWeight_collection.find({'userEmail': flask_login.current_user.id})
     for x in rec:
-        chartData.append([x['day'].strftime("%d/%m/%Y"), x['weight']])
+        chartData.append([x['day'].strftime("%d/%m/%Y"), x['weight'], userId['objectiveW']])
     print(chartData)
 
-    return render_template('weight.html', weightArray=html.unescape(chartData))
+    return render_template('weight.html', weightArray=chartData)
 
 
 # Handler per le pagine non trovate
