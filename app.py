@@ -296,7 +296,7 @@ def foodSelectorProva():
     return render_template("foodSelector.html", foodArr=food)
 
 
-@app.route('/protected/weight', methods=['GET', 'POST'])
+@app.route('/weight', methods=['GET', 'POST'])
 @flask_login.login_required
 def weightProva():
     import html
