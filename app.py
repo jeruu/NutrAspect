@@ -104,14 +104,15 @@ def homeProva():
     dailySummary.append(['Proteins', protTemp, protTot, int((protTemp * 100) / protTot)])
     dailySummary.append(['Fats', fatTemp, fatTot, int((fatTemp * 100) / fatTot)])
 
-    chartArr=[['Macro', 'Quantity']]
+    chartArr = [['Macro', 'Quantity']]
     chartArr.append(['Carbohydrates', int((carbTemp * 100) / carbTot)])
     chartArr.append(['Proteins', int((protTemp * 100) / protTot)])
     chartArr.append(['Fats', int((fatTemp * 100) / fatTot)])
 
     print(foodArrSnack)
     return render_template('home.html', foodArrBreakfast=foodArrBreakfast, foodArrLaunch=foodArrLaunch,
-                           foodArrDinner=foodArrDinner, foodArrSnack=foodArrSnack, dailySummary=dailySummary, chartArr=chartArr)
+                           foodArrDinner=foodArrDinner, foodArrSnack=foodArrSnack, dailySummary=dailySummary,
+                           chartArr=chartArr)
 
 
 # franc
@@ -208,7 +209,8 @@ def registerProva():
                 raise
             insQuery = {"email": email, "password": password, "name": name, "surname": surname, "sex": sex,
                         "bDate": bDate,
-                        "height": height, 'objective': objective, 'objectiveW': objectiveW, 'dCal': dCal, 'dWat': dWat, "wSport": wSport,
+                        "height": height, 'objective': objective, 'objectiveW': objectiveW, 'dCal': dCal, 'dWat': dWat,
+                        "wSport": wSport,
                         "permission": permission}
             users_collection.insert_one(insQuery)
         except:
@@ -249,7 +251,8 @@ def bodyCompProva():
                 {'weight': float(weight), 'day': todayDate(), 'userEmail': flask_login.current_user.id})
             users_collection.update_one({'email': flask_login.current_user.id},
                                         {"$set": {'height': int(height), 'sex': sex, 'wSport': int(wSport),
-                                                  'dWat': dWat, 'dCal': dCal, 'objective': objective, 'objectiveW': int(objectiveW)}})
+                                                  'dWat': dWat, 'dCal': dCal, 'objective': objective,
+                                                  'objectiveW': int(objectiveW)}})
             return redirect('/home')
         except Exception as e:
             print(e)
@@ -269,17 +272,17 @@ def foodSelectorProva():
     food = []
 
     if search is not None:
-        foodQr = foodList_collection.find({'name': search})
+        foodQr = foodList_collection.find({'name': search, 'validate': True})
     else:
-        foodQr = foodList_collection.find()
+        foodQr = foodList_collection.find({'validate': True})
     for x in foodQr:
         food.append([x["name"], x["cal"], x["carb"], x["protein"], x["fat"]])
-
 
     if foodName is not None and gr is not None:
         if dailyFood_collection.find_one({'userEmail': flask_login.current_user.id, 'day': todayDate()}) is not None:
             try:
-                mealTemp = dailyFood_collection.find_one({'userEmail': flask_login.current_user.id, 'day': todayDate()})[meal]
+                mealTemp = \
+                    dailyFood_collection.find_one({'userEmail': flask_login.current_user.id, 'day': todayDate()})[meal]
             except:
                 pass
 
@@ -373,9 +376,38 @@ def addFoodProva():
     return render_template('addFood.html')
 
 
-@app.route('/admin')
+@app.route('/admin', methods=['GET', 'POST'])
+@flask_login.login_required
 def adminProva():
-    return render_template('admin.html', foodArr=[['pollo', 10, 10, 10]])
+    searchTV = request.form.get('searchTV')
+    search = request.form.get('search')
+
+    verified = request.form.get('verified')
+    delete = request.form.get('delete')
+    foodArrTV = []
+    foodArr = []
+
+    # TODO BOTTONIX
+    if verified is not None:
+        foodList_collection.update_one({'name': verified, 'validate': False}, {"$set": {'validate': True}})
+    if delete is not None:
+        foodList_collection.delete_one({'name': delete, 'validate': False})
+
+    if searchTV is not None:
+        foodQr = foodList_collection.find({'name': searchTV, 'validate': False})
+    else:
+        foodQr = foodList_collection.find({'validate': False})
+    for x in foodQr:
+        foodArrTV.append([x["name"], x["cal"], x["carb"], x["protein"], x["fat"]])
+
+    if search is not None:
+        foodQr = foodList_collection.find({'name': search, 'validate': True})
+    else:
+        foodQr = foodList_collection.find({'validate': True})
+    for x in foodQr:
+        foodArr.append([x["name"], x["cal"], x["carb"], x["protein"], x["fat"]])
+
+    return render_template('admin.html', foodArrTV=foodArrTV, foodArr=foodArr)
 
 
 def yearToday(bDate):
