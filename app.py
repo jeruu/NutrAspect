@@ -38,7 +38,7 @@ def loginRiuscitoProva(query):  # put application's code here
 # todo index
 @app.route('/', methods=['GET', 'POST'])
 def indexProva():
-    return render_template('index.html')
+    return render_template('TrueIndex.html')
 
 
 @app.route('/cls', methods=['GET', 'POST'])
@@ -188,7 +188,7 @@ def loginNuovo():
 @flask_login.login_required
 def logoutNuovo():
     flask_login.logout_user()
-    return 'loguoutfatto'
+    return redirect("/")
 
 
 # Pagina per il sign up
@@ -281,6 +281,7 @@ def foodSelectorProva():
     meal = request.form.get('meal')
     mealTemp = []
     food = []
+    divToShow = ''
 
     if search is not None:
         foodQr = foodList_collection.find({'name': search, 'validate': True})
@@ -303,14 +304,14 @@ def foodSelectorProva():
         else:
             dailyFood_collection.insert_one(
                 {'userEmail': flask_login.current_user.id, 'day': todayDate(), meal: mealTemp})
+        divToShow = 'foodAddSuccess'
 
-    return render_template("foodSelector.html", foodArr=food)
+    return render_template("foodSelector.html", foodArr=food, divToShow=divToShow)
 
 
 @app.route('/weight', methods=['GET', 'POST'])
 @flask_login.login_required
 def weightProva():
-    import html
     weight = request.form.get('weight')
     chartData = [['Date', 'Weight', 'Goal Weight']]
     userId = users_collection.find_one({'email': flask_login.current_user.id})
@@ -382,14 +383,18 @@ def addFoodProva():
         foodList_collection.insert_one(
             {'name': name, 'cal': int(cal), 'carb': int(carb), 'protein': int(protein), 'fat': int(fat),
              'validate': validate})
+        divToShow = 'foodAddSuccess'
     except:
         return render_template('addFood.html')
-    return render_template('addFood.html')
+    return render_template('addFood.html', divToShow=divToShow)
 
 
 @app.route('/admin', methods=['GET', 'POST'])
 @flask_login.login_required
 def adminProva():
+    if users_collection.find_one({'email': flask_login.current_user.id})["permission"] == 0:
+        return render_template('404.html')
+
     searchTV = request.form.get('searchTV')
     search = request.form.get('search')
 
