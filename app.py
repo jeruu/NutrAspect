@@ -4,6 +4,9 @@ from flask import Flask
 from flask import request
 from flask import redirect
 from flask import render_template
+
+from fitness import *
+
 import flask_login
 import pymongo
 
@@ -23,35 +26,30 @@ dailyWater_collection = db['dailyWater']
 foodList_collection = db['foodList']
 dailyFood_collection = db['dailyFood']
 
+if __name__ == '__main__':
+    app.run()
 
-# pagina per il login effettuato todo prove
-@app.route('/fx', methods=['GET', 'POST'])
-def loginRiuscitoProva(query):  # put application's code here
 
-    return '''  <h2>Il login è riuscito!</h2> 
-                <h3>name : {}</h3>
-                <h3>surname : {}</h3>
-                <h3>email : {}</h3>
-                '''.format(query['name'], query['surname'], query['email'])
+class User(flask_login.UserMixin):
+    pass
+
+
+@login_manager.user_loader
+def user_loader(email):
+    user = User()
+    user.id = email
+    return user
 
 
 # todo index
 @app.route('/', methods=['GET', 'POST'])
-def indexProva():
-    return render_template('TrueIndex.html')
-
-
-@app.route('/cls', methods=['GET', 'POST'])
-def puliscituttooo():
-    dailyWater_collection.delete_many({})
-    dailyWeight_collection.delete_many({})
-    users_collection.delete_many({})
+def indexPage():
     return render_template('index.html')
 
 
 @app.route('/home', methods=['GET', 'POST'])
 @flask_login.login_required
-def homeProva():
+def homePage():
     dailyMeal = dailyFood_collection.find_one({'userEmail': flask_login.current_user.id, 'day': todayDate()})
     dailySummary = []
 
@@ -127,21 +125,9 @@ def homeProva():
                            chartArr=chartArr, userName=userName)
 
 
-# franc
-class User(flask_login.UserMixin):
-    pass
-
-
-@login_manager.user_loader
-def user_loader(email):
-    user = User()
-    user.id = email
-    return user
-
-
 # Pagina per il login
 @app.route('/login', methods=['GET', 'POST'])
-def loginNuovo():
+def loginPage():
     # Setup errore
     messageDiv = ['']
 
@@ -182,19 +168,16 @@ def loginNuovo():
     return render_template('login.html', divToShow=messageDiv)
 
 
-# TODO LOGIN NUOVO
-
-
 @app.route('/logout', methods=['GET', 'POST'])
 @flask_login.login_required
-def logoutNuovo():
+def logoutPage():
     flask_login.logout_user()
     return redirect("/")
 
 
 # Pagina per il sign up
 @app.route('/register', methods=['GET', 'POST'])
-def registerProva():
+def registerPage():
     messageDiv = ''
 
     # Ricaviamo dal post tutti i valori che ci servono per il sign up
@@ -238,7 +221,7 @@ def registerProva():
 
 @app.route('/bodyComp', methods=['GET', 'POST'])
 @flask_login.login_required
-def bodyCompProva():
+def bodyCompPage():
     weight = request.form.get('weight')
     height = request.form.get('height')
     sex = request.form.get('sexRadio')
@@ -270,12 +253,12 @@ def bodyCompProva():
             print(e)
             return render_template("bodyComp.html")
     else:
-        return redirect('/protected/weight')
+        return redirect('/weight')
 
 
 @app.route('/foodSelector', methods=['GET', 'POST'])
 @flask_login.login_required
-def foodSelectorProva():
+def foodSelectorPage():
     search = request.form.get('search')
     gr = request.form.get('gr')
     foodName = request.form.get('foodName')
@@ -312,39 +295,34 @@ def foodSelectorProva():
 
 @app.route('/weight', methods=['GET', 'POST'])
 @flask_login.login_required
-def weightProva():
+def weightPage():
     weight = request.form.get('weight')
     chartData = [['Date', 'Weight', 'Goal Weight']]
     userId = users_collection.find_one({'email': flask_login.current_user.id})
     if weight is not None:
-        dailyWeight_collection.insert_one(
-            {'weight': float(weight), 'day': todayDate(), 'userEmail': flask_login.current_user.id})
+        try:
+            dailyWeight_collection.update_one({'day': todayDate(), 'userEmail': flask_login.current_user.id},
+                                              {'$set': {'weight': float(weight)}})
+        except:
+            dailyWeight_collection.insert_one(
+                {'weight': float(weight), 'day': todayDate(), 'userEmail': flask_login.current_user.id})
 
     rec = dailyWeight_collection.find({'userEmail': flask_login.current_user.id})
+    if rec.count() == 0:
+        return redirect('/bodyComp')
+
     for x in rec:
         chartData.append([x['day'].strftime("%d/%m/%Y"), x['weight'], userId['objectiveW']])
-    print(chartData)
 
     lastWeight = chartData[-1][1]
     gWeight = chartData[-1][2]
-    print(lastWeight)
     return render_template('weight.html', weightArray=chartData, lastWeight=lastWeight, gWeight=gWeight,
-                           lossWeight=chartData[1][1]-lastWeight)
-
-
-# Handler per le pagine non trovate
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html')
-
-
-if __name__ == '__main__':
-    app.run()
+                           lossWeight=chartData[1][1] - lastWeight)
 
 
 @app.route('/water', methods=['GET', 'POST'])
 @flask_login.login_required
-def waterprova():
+def waterPage():
     water = request.form.get('mlwater')
     reset = request.form.get('reset')
     racml = users_collection.find_one({'email': flask_login.current_user.id})["dWat"]
@@ -371,7 +349,7 @@ def waterprova():
 
 @app.route('/profile', methods=['GET', 'POST'])
 @flask_login.login_required
-def profileprova():
+def profilePage():
     uEmail = flask_login.current_user.id
 
     qr = users_collection.find_one({'email': uEmail})
@@ -435,7 +413,7 @@ def profileprova():
 
 @app.route('/addFood', methods=['GET', 'POST'])
 @flask_login.login_required
-def addFoodProva():
+def addFoodPage():
     name = request.form.get('foodName')
     cal = request.form.get('foodCal')
     carb = request.form.get('foodCarb')
@@ -454,7 +432,7 @@ def addFoodProva():
 
 @app.route('/admin', methods=['GET', 'POST'])
 @flask_login.login_required
-def adminProva():
+def adminPage():
     if users_collection.find_one({'email': flask_login.current_user.id})["permission"] == 0:
         return render_template('404.html')
 
@@ -489,55 +467,10 @@ def adminProva():
     return render_template('admin.html', foodArrTV=foodArrTV, foodArr=foodArr)
 
 
-def yearToday(bDate):
-    today = datetime.datetime.today()
-    if bDate.month <= today.month:
-        if bDate.day <= today.day:
-            return int(today.year - bDate.year)
-    return int(today.year - bDate.year) - 1
-
-
-def todayDate():
-    dt = datetime.datetime.today()
-    return dt.replace(hour=0, minute=0, second=0, microsecond=0)
-
-
-def isNumber(water):
-    try:
-        int(water)
-        return True
-    except:
-        return False
-
-
-def watCal(sex, wSport, yearUser, weight, height, objective):
-    dWat = 0
-    dCal = 0
-    if sex == 'male':
-        dWat = 2800
-        dCal = int(66.5 + (13.75 * float(weight)) + (5 * int(height)) - (6.775 * int(yearUser)))
-    else:
-        dWat = 2000
-        dCal = int(65.5 + (9.563 * float(weight)) + (1.850 * int(height)) - (4.676 * int(yearUser)))
-
-    if wSport == 0:
-        dCal *= 1.2
-    else:
-        if wSport == 1 or wSport == 2:
-            dCal *= 1.375
-        else:
-            if wSport == 3 or wSport == 4:
-                dCal *= 1.50
-            else:
-                if wSport == 5:
-                    dCal *= 1.725
-                else:
-                    dCal *= 1.9
-    if objective == 'wLoss':
-        dCal -= (dCal * 17) / 100
-    if objective == 'wGain':
-        dCal += 500
-    return [dWat, dCal]
+# Handler per le pagine non trovate
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html')
 
 
 def foodArrDump(dailyMeal, meal):
@@ -553,5 +486,4 @@ def foodArrDump(dailyMeal, meal):
             foodArr.append(
                 [x["name"], food[1], int((x["cal"] * grCf)), int((x["carb"] * grCf)), int((x["protein"] * grCf)),
                  int((x["fat"] * grCf))])
-            # int((x["fat"] / 100) * float(food[1]))
     return foodArr
