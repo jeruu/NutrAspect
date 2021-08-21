@@ -34,8 +34,15 @@
                 <h5></h5>
                 <h5 style="display: inline-block" class="lead">Your goal weight is</h5>
                 <h5 id="idealWeight" name="idealWeight" style="display: inline-block">{{ gWeight }}</h5>
-                <h5 style="display: inline-block" class="lead">Kg. You've already lost</h5>
-                <h5 style="display:inline-block" id="lostKg" name="lostKg">{{ lossWeight }}</h5>
+                <h5 style="display: inline-block" class="lead">
+                                    {% block weight  %}
+                    {% if  lossWeight>=0 %}
+                        You lost  <h5 style="display:inline-block" id="lostKg" name="lostKg"> {{ lossWeight }}</h5>
+                        {% else %}
+                        You gained <h5 style="display:inline-block" id="lostKg" name="lostKg"> {{ -lossWeight }}</h5>
+                    {% endif %}
+                    {% endblock weight  %}
+                </h5>
                 <h5 style="display: inline-block" class="lead">Kg. Keep going!!</h5>
             </div>
             <div class="row">

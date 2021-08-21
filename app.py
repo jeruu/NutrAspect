@@ -329,7 +329,7 @@ def weightProva():
     gWeight = chartData[-1][2]
     print(lastWeight)
     return render_template('weight.html', weightArray=chartData, lastWeight=lastWeight, gWeight=gWeight,
-                           lossWeight=gWeight - lastWeight)
+                           lossWeight=chartData[1][1]-lastWeight)
 
 
 # Handler per le pagine non trovate
