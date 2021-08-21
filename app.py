@@ -252,7 +252,7 @@ def bodyCompProva():
     if dailyWeight_collection.find_one({'userEmail': flask_login.current_user.id}) is None:
         try:
             yearUser = yearToday(users_collection.find_one({'email': flask_login.current_user.id})['bDate'])
-            [dWat, dCal] = calWat(sex, int(wSport), yearUser, weight, height, objective)
+            [dWat, dCal] = watCal(sex, int(wSport), yearUser, weight, height, objective)
             dCal = int(dCal)
         except Exception as e:
             print(e)
@@ -328,7 +328,8 @@ def weightProva():
     lastWeight = chartData[-1][1]
     gWeight = chartData[-1][2]
     print(lastWeight)
-    return render_template('weight.html', weightArray=chartData, lastWeight=lastWeight, gWeight=gWeight, lossWeight=gWeight-lastWeight)
+    return render_template('weight.html', weightArray=chartData, lastWeight=lastWeight, gWeight=gWeight,
+                           lossWeight=gWeight - lastWeight)
 
 
 # Handler per le pagine non trovate
@@ -372,7 +373,14 @@ def waterprova():
 @flask_login.login_required
 def profileprova():
     uEmail = flask_login.current_user.id
+
     qr = users_collection.find_one({'email': uEmail})
+
+    weight = dailyWeight_collection.find_one({'userEmail': uEmail})['weight']
+    [dWat, dCal] = watCal(qr['sex'], int(qr['wSport']), yearToday(qr['bDate']), int(weight), qr['height'],
+                          qr['objective'])
+    users_collection.update_one({'email': uEmail}, {'$set': {'dCal': int(dCal)}})
+    print(dCal)
     uName = qr['name']
     uSurname = qr['surname']
     uObjW = qr['objectiveW']
@@ -421,8 +429,6 @@ def profileprova():
     if wSport is not None:
         if wSport != uWSport:
             users_collection.update_one({'email': uEmail}, {'$set': {'wSport': int(wSport)}})
-
-
 
     return render_template('profile.html', uEmail=uEmail, uName=uName, uSurname=uSurname, uObjW=uObjW)
 
@@ -504,7 +510,7 @@ def isNumber(water):
         return False
 
 
-def calWat(sex, wSport, yearUser, weight, height, objective):
+def watCal(sex, wSport, yearUser, weight, height, objective):
     dWat = 0
     dCal = 0
     if sex == 'male':
