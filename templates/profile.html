@@ -11,13 +11,13 @@
                 <form method="post">
                     <h4 class="h4 mt-4">Update your personal info</h4>
                     <label for="name" style="display: inline-block" class="mx-3 my-2 mt-4">Name: </label><br>
-                    <input id="name" name="name" placeholder="Scompagno" class="form-control mx-3 my-1" style="display: inline-block;max-width: 70%"><br>
+                    <input id="name" name="name" placeholder="{{ uName }}" class="form-control mx-3 my-1" style="display: inline-block;max-width: 70%"><br>
                     <label for="surname" style="display: inline-block" class="mx-3 my-2">Surname: </label><br>
-                    <input id="surname" name="surname" placeholder="Fidato" class="form-control mx-3 my-1" style="display: inline-block;max-width: 70%"><br>
+                    <input id="surname" name="surname" placeholder="{{ uSurname }}" class="form-control mx-3 my-1" style="display: inline-block;max-width: 70%"><br>
                     <label for="email" style="display: inline-block" class="mx-3 my-2">Email: </label><br>
-                    <input id="email" name="email" placeholder="villa@comunale.drug" class="form-control mx-3 my-1" style="display: inline-block;max-width: 70%"><br>
+                    <input id="email" name="email" placeholder="{{ uEmail }}" class="form-control mx-3 my-1" style="display: inline-block;max-width: 70%"><br>
                     <label for="email" style="display: inline-block" class="mx-3 my-2">Birthday date: </label><br>
-                    <input type="date" id="email" name="email" class="form-control mx-3 my-1 mb-4" style="display: inline-block;width: 70%"><br>
+                    <input type="date" id="date" name="date" placeholder="02/02/2022" class="form-control mx-3 my-1 mb-4" style="display: inline-block;width: 70%" ><br>
                     <button class="btn btn-primary mb-4" id="btn" name="btn" type="submit">Submit</button>
                 </form>
             </div>
@@ -39,10 +39,10 @@
                 <h4 class="h4 mt-4">Update your objectives: </h4>
                 <form method="post">
                     <label for="oldPsw" style="display: inline-block" class="mx-3 my-2 mt-4">Goal Weight </label><br>
-                    <input type="text" id="weight" name="weight" placeholder="Your weight goal" class="form-control mx-3 my-1 mb-4" style="display: inline-block;width: 50%"><br>
+                    <input placeholder="{{ uObjW }}" type="text" id="weight" name="objW" placeholder="Your weight goal" class="form-control mx-3 my-1 mb-4" style="display: inline-block;width: 50%"><br>
                     <div class="form-floating py-md-4 my-3">
                         <div class="form-check form-check-inline">
-                          <input class="form-check-input" type="radio" id="inlineRadioWL" value="wLoss" name="wRadio">
+                          <input  class="form-check-input" type="radio" id="inlineRadioWL" value="wLoss" name="wRadio">
                           <label class="form-check-label" for="inlineRadioWL">Weight Loss</label>
                         </div>
                         <div class="form-check form-check-inline">
@@ -57,6 +57,7 @@
                     <div class="py-4 my-3">
                         <label for="customRange3" class="form-label">Weekly Training: <span id="demo"></span></label>
                         <input type="range" class="form-range" min="0" max="7" step="1" id="customRange3" name="wSport">
+                        <button class="btn btn-primary mb-4">Submit</button>
                     </div>
                 </form>
             </div>

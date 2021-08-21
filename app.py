@@ -121,9 +121,10 @@ def homeProva():
     chartArr.append(['Fats', fatP])
 
     print(foodArrSnack)
+    userName = users_collection.find_one({'email': flask_login.current_user.id})['name']
     return render_template('home.html', foodArrBreakfast=foodArrBreakfast, foodArrLaunch=foodArrLaunch,
                            foodArrDinner=foodArrDinner, foodArrSnack=foodArrSnack, dailySummary=dailySummary,
-                           chartArr=chartArr)
+                           chartArr=chartArr, userName=userName)
 
 
 # franc
@@ -324,7 +325,10 @@ def weightProva():
         chartData.append([x['day'].strftime("%d/%m/%Y"), x['weight'], userId['objectiveW']])
     print(chartData)
 
-    return render_template('weight.html', weightArray=chartData)
+    lastWeight = chartData[-1][1]
+    gWeight = chartData[-1][2]
+    print(lastWeight)
+    return render_template('weight.html', weightArray=chartData, lastWeight=lastWeight, gWeight=gWeight, lossWeight=gWeight-lastWeight)
 
 
 # Handler per le pagine non trovate
@@ -364,10 +368,63 @@ def waterprova():
     return render_template('water.html', todayml=todayml, racml=racml)
 
 
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'POST'])
 @flask_login.login_required
 def profileprova():
-    return render_template('profile.html')
+    uEmail = flask_login.current_user.id
+    qr = users_collection.find_one({'email': uEmail})
+    uName = qr['name']
+    uSurname = qr['surname']
+    uObjW = qr['objectiveW']
+    uObj = qr['objective']
+    uWSport = qr['wSport']
+
+    name = request.form.get('name')
+    surname = request.form.get('surname')
+    email = request.form.get('email')
+    bDate = request.form.get('date')
+
+    objectiveW = request.form.get('objW')
+    objective = request.form.get('wRadio')
+    wSport = request.form.get('wSport')
+
+    oldPsw = request.form.get('oldPsw')
+    newPsw1 = request.form.get('newPsw1')
+    newPsw2 = request.form.get('newPsw2')
+
+    if name is not None:
+        if len(name) > 1:
+            users_collection.update_one({'email': uEmail}, {'$set': {'name': name}})
+    if surname is not None:
+        if len(name) > 1:
+            users_collection.update_one({'email': uEmail}, {'$set': {'surname': surname}})
+    if email is not None:
+        if len(name) > 1:
+            if users_collection.find_one({'email': email}) is None:
+                users_collection.update_one({'email': uEmail}, {'$set': {'email': email}})
+    # if bDate is not None:
+    #    users_collection.update_one({'email': uEmail}, {'$set': {'bDate': bDate}})
+
+    if oldPsw == qr['password']:
+        if newPsw1 is not None:
+            if len(newPsw1) > 6:
+                if newPsw1 == newPsw2:
+                    users_collection.update_one({'email': uEmail}, {'$set': {'password': newPsw1}})
+    if objectiveW is not None:
+        if isNumber(objectiveW):
+            users_collection.update_one({'email': uEmail}, {'$set': {'objectiveW': int(objectiveW)}})
+
+    if objective is not None:
+        if objective != uObj:
+            users_collection.update_one({'email': uEmail}, {'$set': {'objective': objective}})
+
+    if wSport is not None:
+        if wSport != uWSport:
+            users_collection.update_one({'email': uEmail}, {'$set': {'wSport': int(wSport)}})
+
+
+
+    return render_template('profile.html', uEmail=uEmail, uName=uName, uSurname=uSurname, uObjW=uObjW)
 
 
 @app.route('/addFood', methods=['GET', 'POST'])

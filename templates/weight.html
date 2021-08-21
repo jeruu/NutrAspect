@@ -30,12 +30,12 @@
             <div class="col-sm-12 col-md-5 text-center mx-auto bg-light bg-gradient my-4 pb-3">
                 <h3 class="mt-3">Current Weight</h3>
                 <h4>The last time you updated you weight, you weighed</h4>
-                <h4 id="currentWeight" name="currentWeight" style="display: inline-block">888</h4><h4 style="display: inline-block" class="text-reset lead"> Kg</h4>
+                <h4 id="currentWeight" name="currentWeight" style="display: inline-block">{{ lastWeight }}</h4><h4 style="display: inline-block" class="text-reset lead"> Kg</h4>
                 <h5></h5>
                 <h5 style="display: inline-block" class="lead">Your goal weight is</h5>
-                <h5 id="idealWeight" name="idealWeight" style="display: inline-block">555</h5>
+                <h5 id="idealWeight" name="idealWeight" style="display: inline-block">{{ gWeight }}</h5>
                 <h5 style="display: inline-block" class="lead">Kg. You've already lost</h5>
-                <h5 style="display:inline-block" id="lostKg" name="lostKg">333</h5>
+                <h5 style="display:inline-block" id="lostKg" name="lostKg">{{ lossWeight }}</h5>
                 <h5 style="display: inline-block" class="lead">Kg. Keep going!!</h5>
             </div>
             <div class="row">
