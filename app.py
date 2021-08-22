@@ -10,7 +10,7 @@ from fitness import *
 import flask_login
 import pymongo
 
-# assegnazione app
+# assegnazione app e chiave segreta
 app = Flask(__name__)
 app.secret_key = 'chiavesecreta'
 
@@ -26,14 +26,17 @@ dailyWater_collection = db['dailyWater']
 foodList_collection = db['foodList']
 dailyFood_collection = db['dailyFood']
 
+# avvio del server flask
 if __name__ == '__main__':
     app.run()
 
 
+# Creazione classe user
 class User(flask_login.UserMixin):
     pass
 
 
+# Loader dell'utente, dove viene assegnato per comodità l'email come id
 @login_manager.user_loader
 def user_loader(email):
     user = User()
@@ -41,16 +44,26 @@ def user_loader(email):
     return user
 
 
-# todo index
+# Pagina root e principale del sito
 @app.route('/', methods=['GET', 'POST'])
 def indexPage():
     return render_template('index.html')
 
 
+# Homepage dell'area utente
 @app.route('/home', methods=['GET', 'POST'])
 @flask_login.login_required
 def homePage():
-    dailyMeal = dailyFood_collection.find_one({'userEmail': flask_login.current_user.id, 'day': todayDate()})
+    # inizializzazione di valori e coefficienti
+    # recupero degli alimenti consumati in data odierna
+    uEmail = flask_login.current_user.id
+
+    foodDate = todayDate()
+    if 'foodDate' in request.args:
+        foodDate = request.args['foodDate']
+        foodDate = datetime.datetime.strptime(foodDate, '%Y-%m-%d')
+
+    dailyMeal = dailyFood_collection.find_one({'userEmail': uEmail, 'day': foodDate})
     dailySummary = []
 
     calTemp = 0
@@ -62,12 +75,13 @@ def homePage():
     protCoeff = .3 / 4
     fatCoeff = .3 / 9
 
+    # dump dei dati dal record in mongodb ai vettori divisi per pasto
     foodArrBreakfast = foodArrDump(dailyMeal, 'Breakfast')
     foodArrLaunch = foodArrDump(dailyMeal, 'Launch')
     foodArrDinner = foodArrDump(dailyMeal, 'Dinner')
     foodArrSnack = foodArrDump(dailyMeal, 'Snack')
 
-    # TODO
+    # somma totale di tutti i nutrimenti della giornata
     for food in foodArrBreakfast:
         calTemp += food[2]
         carbTemp += food[3]
@@ -92,16 +106,19 @@ def homePage():
         protTemp += food[4]
         fatTemp += food[5]
 
-    calD = int(users_collection.find_one({'email': flask_login.current_user.id})['dCal'])
+    # Recupero delle calorie giornaliere e calcolo dei nutrimenti totali consigliati
+    calD = int(users_collection.find_one({'email': uEmail})['dCal'])
     carbTot = int(calD * carbCoeff)
     protTot = int(calD * protCoeff)
     fatTot = int(calD * fatCoeff)
 
+    # creazione dell'array per il summary
     dailySummary.append(['Calories', calTemp, calD, int((calTemp * 100) / calD)])
     dailySummary.append(['Carbohydrates', carbTemp, carbTot, int((carbTemp * 100) / carbTot)])
     dailySummary.append(['Proteins', protTemp, protTot, int((protTemp * 100) / protTot)])
     dailySummary.append(['Fats', fatTemp, fatTot, int((fatTemp * 100) / fatTot)])
 
+    # creazione dell'array per il chart
     chartArr = [['Macro', 'Quantity']]
 
     carbP = int((carbTemp * 100) / carbTot)
@@ -118,11 +135,10 @@ def homePage():
     chartArr.append(['Proteins', protP])
     chartArr.append(['Fats', fatP])
 
-    print(foodArrSnack)
-    userName = users_collection.find_one({'email': flask_login.current_user.id})['name']
+    userName = users_collection.find_one({'email': uEmail})['name']
     return render_template('home.html', foodArrBreakfast=foodArrBreakfast, foodArrLaunch=foodArrLaunch,
                            foodArrDinner=foodArrDinner, foodArrSnack=foodArrSnack, dailySummary=dailySummary,
-                           chartArr=chartArr, userName=userName)
+                           chartArr=chartArr, userName=userName, foodDate=foodDate)
 
 
 # Pagina per il login
@@ -138,18 +154,11 @@ def loginPage():
     # Controlliamo che nessun valore sia nullo, e nel caso procediamo con il controllo di email e password
     if email is not None and password is not None:
 
-        # todo eliminare
-        print('POST pieno')
-        print(email)
-        print(password)
-
         # Verifica se c'è un utente con la mail inserita
         query = users_collection.find_one({"email": email})
 
-        # todo eliminare
-        print(query)
-
-        # se la query è andata a buon fine, controlliamo la password, se combaciano si effettua il log in
+        # se la query è andata a buon fine, controlliamo la password, se combaciano si effettua il log in altrimenti
+        # viene passato un messaggio d'errore
         if query is not None:
             if query['password'] == password:
                 flask_login.login_user(user_loader(email))
@@ -161,16 +170,14 @@ def loginPage():
         else:
             messageDiv = 'LoginError'
 
-    # altrimenti todo
-    else:
-        print('POST vuoto')
-
     return render_template('login.html', divToShow=messageDiv)
 
 
+# pagina del logout
 @app.route('/logout', methods=['GET', 'POST'])
 @flask_login.login_required
 def logoutPage():
+    # si effettua il logout e si viene rimandati all'inizio del sito
     flask_login.logout_user()
     return redirect("/")
 
@@ -200,7 +207,9 @@ def registerPage():
             if users_collection.find_one({'email': email}) is not None:
                 raise
             bDate = datetime.datetime.strptime(bDate, '%Y-%m-%d')
-            if yearToday(bDate) <= 0:
+            if yearToday(bDate) <= 17:
+                raise
+            if password < 8:
                 raise
             insQuery = {"email": email, "password": password, "name": name, "surname": surname, "sex": sex,
                         "bDate": bDate,
@@ -216,12 +225,15 @@ def registerPage():
         # Carichiamo la pagina registrata con successo
         return render_template('register.html', divToShow=messageDiv)
 
-    return render_template('register.html', divToShow='')
+    return render_template('register.html', divToShow=messageDiv)
 
 
+# pagina per inserire i dati utente per la prima volta, succesivamente modificabili da '/profile'
 @app.route('/bodyComp', methods=['GET', 'POST'])
 @flask_login.login_required
 def bodyCompPage():
+    # Recupero dati dalla form e inizializzazione variabili
+    uEmail = flask_login.current_user.id
     weight = request.form.get('weight')
     height = request.form.get('height')
     sex = request.form.get('sexRadio')
@@ -232,33 +244,44 @@ def bodyCompPage():
 
     dCal = 0
     dWat = 0
-    if dailyWeight_collection.find_one({'userEmail': flask_login.current_user.id}) is None:
+
+    # se non viene riscontrato nessun peso nel database
+    if dailyWeight_collection.find_one({'userEmail': uEmail}) is None:
         try:
-            yearUser = yearToday(users_collection.find_one({'email': flask_login.current_user.id})['bDate'])
+            # recuperiamo gli anni dell'utente e calcoliamo calorie e acqua giornaliere
+            yearUser = yearToday(users_collection.find_one({'email': uEmail})['bDate'])
             [dWat, dCal] = watCal(sex, int(wSport), yearUser, weight, height, objective)
             dCal = int(dCal)
-        except Exception as e:
-            print(e)
+        except:
+            # se qualcosa va storto mostriamo ancora bodyComp
             return render_template("bodyComp.html")
 
         try:
+            # inseriamo il peso e aggiorniamo i dati dell'utente
             dailyWeight_collection.insert_one(
-                {'weight': float(weight), 'day': todayDate(), 'userEmail': flask_login.current_user.id})
-            users_collection.update_one({'email': flask_login.current_user.id},
+                {'weight': float(weight), 'day': todayDate(), 'userEmail': uEmail})
+            users_collection.update_one({'email': uEmail},
                                         {"$set": {'height': int(height), 'sex': sex, 'wSport': int(wSport),
                                                   'dWat': dWat, 'dCal': dCal, 'objective': objective,
                                                   'objectiveW': int(objectiveW)}})
+            # infine redirect a home
             return redirect('/home')
-        except Exception as e:
-            print(e)
+        except:
+            # se qualcosa va storto mostriamo ancora bodyComp
             return render_template("bodyComp.html")
     else:
+        # se l'utente ha già inserito un peso lo rimanda a '/weight'
         return redirect('/weight')
 
 
+# pagina per l'inserimento dei cibi mangiati dall'utente
 @app.route('/foodSelector', methods=['GET', 'POST'])
 @flask_login.login_required
 def foodSelectorPage():
+    import re
+
+    uEmail = flask_login.current_user.id
+    # Recupero dati dalla form e inizializzazione variabili
     search = request.form.get('search')
     gr = request.form.get('gr')
     foodName = request.form.get('foodName')
@@ -267,89 +290,115 @@ def foodSelectorPage():
     food = []
     divToShow = ''
 
+    # se viene ricercato un cibo viene mostrato, altrimenti viene mostrato tutto l'elenco
     if search is not None:
+        search = re.compile(search, re.IGNORECASE)
         foodQr = foodList_collection.find({'name': search, 'validate': True})
     else:
-        foodQr = foodList_collection.find({'validate': True})
+        foodQr = foodList_collection.find({'validate': True}).limit(100)
     for x in foodQr:
         food.append([x["name"], x["cal"], x["carb"], x["protein"], x["fat"]])
 
+    # se il cibo è inserito
     if foodName is not None and gr is not None:
-        if dailyFood_collection.find_one({'userEmail': flask_login.current_user.id, 'day': todayDate()}) is not None:
+        # controlliamo se ha già un record con il pasto scelto
+        if dailyFood_collection.find_one({'userEmail': uEmail, 'day': todayDate()}) is not None:
             try:
+                # nel caso c'è lo inseriamo in mealTemp
                 mealTemp = \
-                    dailyFood_collection.find_one({'userEmail': flask_login.current_user.id, 'day': todayDate()})[meal]
+                    dailyFood_collection.find_one({'userEmail': uEmail, 'day': todayDate()})[meal]
             except:
+                # altrimenti non facciamo nulla
                 pass
 
+            # aggiungiamo il cibo appena inserito dall'utente
             mealTemp.append([foodName, gr])
-            dailyFood_collection.update_one({'userEmail': flask_login.current_user.id, 'day': todayDate()},
+            dailyFood_collection.update_one({'userEmail': uEmail, 'day': todayDate()},
                                             {"$set": {meal: mealTemp}})
         else:
+            # se non ha alcun record ancora veine inserito con mealTemp
             dailyFood_collection.insert_one(
-                {'userEmail': flask_login.current_user.id, 'day': todayDate(), meal: mealTemp})
+                {'userEmail': uEmail, 'day': todayDate(), meal: mealTemp})
         divToShow = 'foodAddSuccess'
 
     return render_template("foodSelector.html", foodArr=food, divToShow=divToShow)
 
 
+# pagina di inserimento peso dell' utente
 @app.route('/weight', methods=['GET', 'POST'])
 @flask_login.login_required
 def weightPage():
+    # Recupero dati dalla form e inizializzazione variabili
+    uEmail = flask_login.current_user.id
     weight = request.form.get('weight')
     chartData = [['Date', 'Weight', 'Goal Weight']]
-    userId = users_collection.find_one({'email': flask_login.current_user.id})
+    userId = users_collection.find_one({'email': uEmail})
+
+    # se è stato passato un peso
     if weight is not None:
         try:
-            dailyWeight_collection.update_one({'day': todayDate(), 'userEmail': flask_login.current_user.id},
+            # aggiorniamo quello di oggi
+            dailyWeight_collection.update_one({'day': todayDate(), 'userEmail': uEmail},
                                               {'$set': {'weight': float(weight)}})
         except:
+            # se non possibile inseriamo un nuovo peso
             dailyWeight_collection.insert_one(
-                {'weight': float(weight), 'day': todayDate(), 'userEmail': flask_login.current_user.id})
+                {'weight': float(weight), 'day': todayDate(), 'userEmail': uEmail})
 
-    rec = dailyWeight_collection.find({'userEmail': flask_login.current_user.id})
+    # recuperiamo tutti i pesi, se sono 0 rimandiamo a bodyComp
+    rec = dailyWeight_collection.find({'userEmail': uEmail})
     if rec.count() == 0:
         return redirect('/bodyComp')
 
+    # creiamo i dati per il chart del peso e peso obbiettivo
     for x in rec:
         chartData.append([x['day'].strftime("%d/%m/%Y"), x['weight'], userId['objectiveW']])
 
+    # recupero ultimi dati da passare
     lastWeight = chartData[-1][1]
     gWeight = chartData[-1][2]
     return render_template('weight.html', weightArray=chartData, lastWeight=lastWeight, gWeight=gWeight,
-                           lossWeight=chartData[1][1] - lastWeight)
+                           lossWeight=int(chartData[1][1]) - int(lastWeight))
 
 
+# pagina inserimento acqua giornaliera
 @app.route('/water', methods=['GET', 'POST'])
 @flask_login.login_required
 def waterPage():
+    # Recupero dati dalla form e inizializzazione variabili
+    uEmail = flask_login.current_user.id
     water = request.form.get('mlwater')
     reset = request.form.get('reset')
-    racml = users_collection.find_one({'email': flask_login.current_user.id})["dWat"]
+    racml = users_collection.find_one({'email': uEmail})["dWat"]
     todayml = 0
 
     try:
+        # se esiste un record riprendiamo gli ml giornalieri e li aggiorniamo
         todayml = \
-            dailyWater_collection.find_one({'userEmail': flask_login.current_user.id, 'day': todayDate()})['ml']
+            dailyWater_collection.find_one({'userEmail': uEmail, 'day': todayDate()})['ml']
         if isNumber(water):
             todayml += int(water)
-        dailyWater_collection.update_one({'userEmail': flask_login.current_user.id, 'day': todayDate()},
+        dailyWater_collection.update_one({'userEmail': uEmail, 'day': todayDate()},
                                          {"$set": {'ml': todayml}})
     except:
+        # altrimenti aggiungiamo il record
         if isNumber(water):
             todayml += int(water)
         dailyWater_collection.insert_one(
-            {'userEmail': flask_login.current_user.id, 'day': todayDate(), 'ml': todayml})
+            {'userEmail': uEmail, 'day': todayDate(), 'ml': todayml})
 
+    # se reset è stato premuto allora resettiamo l'acqua di oggi
     if reset is not None:
-        dailyWater_collection.delete_one({'userEmail': flask_login.current_user.id, 'day': todayDate()})
+        dailyWater_collection.delete_one({'userEmail': uEmail, 'day': todayDate()})
 
     return render_template('water.html', todayml=todayml, racml=racml)
 
 
+# pagina per modifica dati utente e eliminazione dello stesso
 @app.route('/profile', methods=['GET', 'POST'])
 @flask_login.login_required
 def profilePage():
+    # Recupero dati dalla form e inizializzazione variabili
     uEmail = flask_login.current_user.id
 
     qr = users_collection.find_one({'email': uEmail})
@@ -358,12 +407,12 @@ def profilePage():
     [dWat, dCal] = watCal(qr['sex'], int(qr['wSport']), yearToday(qr['bDate']), int(weight), qr['height'],
                           qr['objective'])
     users_collection.update_one({'email': uEmail}, {'$set': {'dCal': int(dCal)}})
-    print(dCal)
     uName = qr['name']
     uSurname = qr['surname']
     uObjW = qr['objectiveW']
     uObj = qr['objective']
     uWSport = qr['wSport']
+    uPass = qr['password']
 
     name = request.form.get('name')
     surname = request.form.get('surname')
@@ -378,62 +427,99 @@ def profilePage():
     newPsw1 = request.form.get('newPsw1')
     newPsw2 = request.form.get('newPsw2')
 
+    delAccount = request.form.get('delAccount')
+    delPass = request.form.get('delPass')
+
+    # nel caso in cui il nome cambia lo aggiorniamo
     if name is not None:
         if len(name) > 1:
             users_collection.update_one({'email': uEmail}, {'$set': {'name': name}})
+    # nel caso in cui il cognome cambia lo aggiorniamo
     if surname is not None:
         if len(name) > 1:
             users_collection.update_one({'email': uEmail}, {'$set': {'surname': surname}})
+    # nel caso in cui l'email cambia la aggiorniamo
     if email is not None:
         if len(name) > 1:
             if users_collection.find_one({'email': email}) is None:
                 users_collection.update_one({'email': uEmail}, {'$set': {'email': email}})
-    # if bDate is not None:
-    #    users_collection.update_one({'email': uEmail}, {'$set': {'bDate': bDate}})
 
-    if oldPsw == qr['password']:
+    # nel caso la data di nascita cambia l'aggiorniamo
+    if bDate is not None:
+        if yearToday(bDate) <= 17:
+            pass
+        else:
+            bDate = datetime.datetime.strptime(bDate, '%Y-%m-%d')
+            users_collection.update_one({'email': uEmail}, {'$set': {'bDate': bDate}})
+
+    # controlli per modifica password
+    if oldPsw == uPass:
         if newPsw1 is not None:
-            if len(newPsw1) > 6:
+            if len(newPsw1) >= 8:
                 if newPsw1 == newPsw2:
                     users_collection.update_one({'email': uEmail}, {'$set': {'password': newPsw1}})
+    # nel caso in cui l'obbiettivo di peso cambia lo modifichiamo
     if objectiveW is not None:
         if isNumber(objectiveW):
             users_collection.update_one({'email': uEmail}, {'$set': {'objectiveW': int(objectiveW)}})
 
+    # nel caso in cui l'obbiettivo cambia lo modifichiamo
     if objective is not None:
         if objective != uObj:
             users_collection.update_one({'email': uEmail}, {'$set': {'objective': objective}})
 
+    # nel caso in cui lo sport settimanale cambia lo modifichiamo
     if wSport is not None:
         if wSport != uWSport:
             users_collection.update_one({'email': uEmail}, {'$set': {'wSport': int(wSport)}})
 
-    return render_template('profile.html', uEmail=uEmail, uName=uName, uSurname=uSurname, uObjW=uObjW)
+    # controlli per eliminare l'account e successivo svuotamento dal database
+    if delAccount is not None:
+        if delPass == uPass:
+            users_collection.delete_many({'email': uEmail})
+            dailyWeight_collection.delete_many({'userEmail': uEmail})
+            dailyWater_collection.delete_many({'userEmail': uEmail})
+            dailyFood_collection.delete_many({'userEmeil': uEmail})
+            return redirect('/logout')
+    return render_template('profile.html', uEmail=uEmail, uName=uName, uSurname=uSurname, uObjW=uObjW, date=bDate)
 
 
+# pagina per l'inserimento degli alimenti
 @app.route('/addFood', methods=['GET', 'POST'])
 @flask_login.login_required
 def addFoodPage():
+    # Recupero dati dalla form e inizializzazione variabili
     name = request.form.get('foodName')
     cal = request.form.get('foodCal')
     carb = request.form.get('foodCarb')
     protein = request.form.get('foodProt')
     fat = request.form.get('foodFat')
     validate = False
+
     try:
+        if foodList_collection.find_one({'name': name}):
+            raise
         foodList_collection.insert_one(
             {'name': name, 'cal': int(cal), 'carb': int(carb), 'protein': int(protein), 'fat': int(fat),
              'validate': validate})
         divToShow = 'foodAddSuccess'
     except:
+        # se non riusciamo rimandiamo alla stessa pagina
         return render_template('addFood.html')
     return render_template('addFood.html', divToShow=divToShow)
 
 
+# pagina admin per verifica del cibo inserito dall'utente
 @app.route('/admin', methods=['GET', 'POST'])
 @flask_login.login_required
 def adminPage():
-    if users_collection.find_one({'email': flask_login.current_user.id})["permission"] == 0:
+    import re
+
+    # Recupero dati dalla form e inizializzazione variabili
+    uEmail = flask_login.current_user.id
+
+    # se l'utente non ha i permessi fingiamo la pagina '/admin' non esista
+    if users_collection.find_one({'email': uEmail})["permission"] == 0:
         return render_template('404.html')
 
     searchTV = request.form.get('searchTV')
@@ -444,23 +530,28 @@ def adminPage():
     foodArrTV = []
     foodArr = []
 
-    # TODO BOTTONIX
+    # nel caso si prema il pulsante per verificare aggiorniamo l'alimento con il validate=true
     if verified is not None:
         foodList_collection.update_one({'name': verified, 'validate': False}, {"$set": {'validate': True}})
+    # nel caso si prema il pulsante per eliminare l'alimento esso viene eliminato
     if delete is not None:
         foodList_collection.delete_one({'name': delete, 'validate': False})
 
+    # pulsante di ricerca per i cibi da validare
     if searchTV is not None:
+        searchTV = re.compile(searchTV, re.IGNORECASE)
         foodQr = foodList_collection.find({'name': searchTV, 'validate': False})
     else:
-        foodQr = foodList_collection.find({'validate': False})
+        foodQr = foodList_collection.find({'validate': False}).limit(100)
     for x in foodQr:
         foodArrTV.append([x["name"], x["cal"], x["carb"], x["protein"], x["fat"]])
 
+    # pulsante di ricerca per i cibi verificati
     if search is not None:
+        search = re.compile(search, re.IGNORECASE)
         foodQr = foodList_collection.find({'name': search, 'validate': True})
     else:
-        foodQr = foodList_collection.find({'validate': True})
+        foodQr = foodList_collection.find({'validate': True}).limit(100)
     for x in foodQr:
         foodArr.append([x["name"], x["cal"], x["carb"], x["protein"], x["fat"]])
 
@@ -473,6 +564,7 @@ def page_not_found(e):
     return render_template('404.html')
 
 
+# funzione per trasferire i dati scalati dal record del cibo di oggi ad un array
 def foodArrDump(dailyMeal, meal):
     foodArr = []
     try:
