@@ -35,7 +35,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-10 bg-light bg-gradient text-center my-4 mx-3 mx-sm-0">
+            <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5 col-xxl-5 bg-light bg-gradient text-center me-md-4 my-4 mx-sm-0">
                 <h4 class="h4 mt-4">Update your objectives: </h4>
                 <form method="post">
                     <label for="oldPsw" style="display: inline-block" class="mx-3 my-2 mt-4">Goal Weight </label><br>
@@ -55,11 +55,27 @@
                         </div>
                     </div>
                     <div class="py-4 my-3">
-                        <label for="customRange3" class="form-label">Weekly Training: <span id="demo"></span></label>
-                        <input type="range" class="form-range" min="0" max="7" step="1" id="customRange3" name="wSport">
+                        <label for="customRange3" class="form-label">Weekly Training: <span id="demo"></span></label><br>
+                        <input type="range" class="form-range my-2" min="0" max="7" step="1" id="customRange3" name="wSport" style="width: 60%"><br>
                         <button class="btn btn-primary mb-4">Submit</button>
                     </div>
                 </form>
+            </div>
+            <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5 col-xxl-5 bg-light bg-gradient text-center me-md-4 my-4 mx-sm-0">
+                <h4 class="h4 mt-4">Delete your account: </h4>
+                <p class="my-2">Your account would be eliminated permanently: there is no going back </p>
+                <a class="btn btn-danger my-3" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    Delete
+                </a>
+                <div class="collapse my-3" id="collapseExample">
+                  <div class="card card-body">
+                      <form method="post">
+                          <h5 class="my-3">Please, to continue insert your current password:</h5>
+                          <input class="form-control my-3" type="password" placeholder="Current Password">
+                          <button type="submit" class="btn btn-danger mt-2">Delete account!</button>
+                      </form>
+                  </div>
+                </div>
             </div>
         </div>
     </main>
