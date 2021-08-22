@@ -209,7 +209,7 @@ def registerPage():
             bDate = datetime.datetime.strptime(bDate, '%Y-%m-%d')
             if yearToday(bDate) <= 17:
                 raise
-            if password < 8:
+            if len(password) < 8:
                 raise
             insQuery = {"email": email, "password": password, "name": name, "surname": surname, "sex": sex,
                         "bDate": bDate,
@@ -217,7 +217,8 @@ def registerPage():
                         "wSport": wSport,
                         "permission": permission}
             users_collection.insert_one(insQuery)
-        except:
+        except Exception as e:
+            print(e)
             messageDiv = 'RegisterError'
             return render_template('register.html', divToShow=messageDiv)
 
@@ -301,25 +302,33 @@ def foodSelectorPage():
 
     # se il cibo è inserito
     if foodName is not None and gr is not None:
-        # controlliamo se ha già un record con il pasto scelto
-        if dailyFood_collection.find_one({'userEmail': uEmail, 'day': todayDate()}) is not None:
-            try:
-                # nel caso c'è lo inseriamo in mealTemp
-                mealTemp = \
-                    dailyFood_collection.find_one({'userEmail': uEmail, 'day': todayDate()})[meal]
-            except:
-                # altrimenti non facciamo nulla
-                pass
+        if len(foodName) >0 and len(gr) >0:
+            # controlliamo se ha già un record con il pasto scelto
+            if dailyFood_collection.find_one({'userEmail': uEmail, 'day': todayDate()}) is not None:
+                try:
+                    # nel caso c'è lo inseriamo in mealTemp
+                    mealTemp = \
+                        dailyFood_collection.find_one({'userEmail': uEmail, 'day': todayDate()})[meal]
+                except:
+                    # altrimenti non facciamo nulla
+                    pass
+                # aggiungiamo il cibo appena inserito dall'utente
+                mealTemp.append([foodName, gr])
+                try:
+                    dailyFood_collection.update_one({'userEmail': uEmail, 'day': todayDate()},
+                                                    {"$set": {meal: mealTemp}})
+                    divToShow = 'foodAddSuccess'
+                except:
+                    divToShow = 'foodAddError'
+            else:
+                try:
+                    # se non ha alcun record ancora veine inserito con mealTemp
+                    dailyFood_collection.insert_one(
+                        {'userEmail': uEmail, 'day': todayDate(), meal: mealTemp})
+                    divToShow = 'foodAddSuccess'
+                except:
+                    divToShow = 'foodAddError'
 
-            # aggiungiamo il cibo appena inserito dall'utente
-            mealTemp.append([foodName, gr])
-            dailyFood_collection.update_one({'userEmail': uEmail, 'day': todayDate()},
-                                            {"$set": {meal: mealTemp}})
-        else:
-            # se non ha alcun record ancora veine inserito con mealTemp
-            dailyFood_collection.insert_one(
-                {'userEmail': uEmail, 'day': todayDate(), meal: mealTemp})
-        divToShow = 'foodAddSuccess'
 
     return render_template("foodSelector.html", foodArr=food, divToShow=divToShow)
 
@@ -479,7 +488,7 @@ def profilePage():
             users_collection.delete_many({'email': uEmail})
             dailyWeight_collection.delete_many({'userEmail': uEmail})
             dailyWater_collection.delete_many({'userEmail': uEmail})
-            dailyFood_collection.delete_many({'userEmeil': uEmail})
+            dailyFood_collection.delete_many({'userEmail': uEmail})
             return redirect('/logout')
     return render_template('profile.html', uEmail=uEmail, uName=uName, uSurname=uSurname, uObjW=uObjW, date=bDate)
 
