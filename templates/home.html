@@ -19,6 +19,24 @@
             <h2 class="border-bottom pb-3 mb-4" id="welcome">Welcome, {{ userName }}</h2>
         </div>
 
+        <div class="container">
+            <div class="row">
+                <div class="col"></div>
+                <div class="col-sm-12 col-md-4 rounded-3 ps-xl-5 ms-md-5 ps-sm-0 ms-sm-0 py-3 my-3 pe-xl-5 me-md-5 pe-sm-0 me-sm-0 align-self-center">
+                    <form method="get">
+                        <div class="input-group">
+                            <input type="date" id="foodDate" name="foodDate" class="form-control" value="{{ foodDate }}" style="display: inline-block" ><br>
+                            <button type="submit" id="dateSubmit" name="dateSubmit" class="btn btn-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col"></div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-12 col-md-5 bg-light rounded-3 ps-xl-5 ms-md-5 ps-sm-0 ms-sm-0 py-3 my-3 pe-xl-5 me-md-5 pe-sm-0 me-sm-0">
                 <h1 class="my-2 text-primary">Daily summary</h1>
