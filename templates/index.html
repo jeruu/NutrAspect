@@ -18,14 +18,14 @@
 </head>
 <body style="background-color: #fcfcfc">
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-nutraspect fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold mb-2" href="#">
                 <img src="{{ url_for('static', filename='images/favicons/logo.svg') }}" alt="" width="30" height="30" class="d-inline-block align-text-top">
                 NutrAspect</a>
             <div class="d-flex">
-                <a href="../login" class="btn btn-light me-2">Login</a>
-                <a href="../register" class="btn btn-light">Register</a>
+                <a href="/login" class="btn btn-light me-2">Login</a>
+                <a href="/register" class="btn btn-light">Register</a>
             </div>
         </div>
     </nav>
@@ -34,7 +34,7 @@
         <div style="padding:128px 16px" class="bg-light">
             <h1 class="my-5">Your personal journey, starts here.</h1>
             <h4 class="my-5 lead h4">Stop wasting your valuable time. Start using NutrAspect to keep your body values in check and you will never stop using it</h4>
-            <a class="btn btn-outline-primary btn-lg my-3" href="../register">
+            <a class="btn btn-outline-primary btn-lg my-3" href="/register">
                 <img src="{{ url_for('static', filename='images/favicons/blue-logo.svg') }}" alt="" width="30" height="30" class="d-inline-block align-text-top">
                 Start Today</a>
         </div>

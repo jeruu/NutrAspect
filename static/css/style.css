@@ -180,3 +180,13 @@ ul#matching li:hover {
   color: #0f73ab;
   padding-left: 5px;
 }
+
+.bg-nutraspect {
+    background: #1a73e8;
+}
+
+.btn-nutraspect {
+  color: #fff;
+  background-color: #1a73e8;
+  border-color: #1a73e8;
+}
