@@ -138,7 +138,7 @@ def homePage():
     userName = users_collection.find_one({'email': uEmail})['name']
     return render_template('home.html', foodArrBreakfast=foodArrBreakfast, foodArrLaunch=foodArrLaunch,
                            foodArrDinner=foodArrDinner, foodArrSnack=foodArrSnack, dailySummary=dailySummary,
-                           chartArr=chartArr, userName=userName, foodDate=foodDate)
+                           chartArr=chartArr, userName=userName, foodDate=foodDate.strftime("%Y-%m-%d"))
 
 
 # Pagina per il login
@@ -418,6 +418,7 @@ def profilePage():
     users_collection.update_one({'email': uEmail}, {'$set': {'dCal': int(dCal)}})
     uName = qr['name']
     uSurname = qr['surname']
+    uBDate = qr['bDate']
     uObjW = qr['objectiveW']
     uObj = qr['objective']
     uWSport = qr['wSport']
@@ -490,7 +491,7 @@ def profilePage():
             dailyWater_collection.delete_many({'userEmail': uEmail})
             dailyFood_collection.delete_many({'userEmail': uEmail})
             return redirect('/logout')
-    return render_template('profile.html', uEmail=uEmail, uName=uName, uSurname=uSurname, uObjW=uObjW, date=bDate)
+    return render_template('profile.html', uEmail=uEmail, uName=uName, uSurname=uSurname, uObjW=uObjW, date=uBDate.strftime("%Y-%m-%d"))
 
 
 # pagina per l'inserimento degli alimenti
