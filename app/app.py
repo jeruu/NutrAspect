@@ -147,6 +147,13 @@ def loginPage():
     # Setup errore
     messageDiv = ['']
 
+    # Controlliamo se l'utente ha già effettuato il login, nel caso lo reinviamo a home
+    try:
+        if flask_login.current_user.id is not None:
+            return redirect('/home')
+    except:
+        pass
+
     # Ricaviamo dal post tutti i valori che ci servono per il log in
     email = request.form.get('email')
     password = request.form.get('password')
@@ -399,6 +406,7 @@ def waterPage():
     # se reset è stato premuto allora resettiamo l'acqua di oggi
     if reset is not None:
         dailyWater_collection.delete_one({'userEmail': uEmail, 'day': todayDate()})
+        todayml=0
 
     return render_template('water.html', todayml=todayml, racml=racml)
 
@@ -529,7 +537,7 @@ def adminPage():
     uEmail = flask_login.current_user.id
 
     # se l'utente non ha i permessi fingiamo la pagina '/admin' non esista
-    if users_collection.find_one({'email': uEmail})["permission"] == 0:
+    if users_collection.find_one({'email': uEmail})["permission"] != 1:
         return render_template('404.html')
 
     searchTV = request.form.get('searchTV')
