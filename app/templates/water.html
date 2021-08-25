@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Water Selector - Nutraspect{% endblock %}
+{% block title %}Water Selector - NutrAspect{% endblock %}
 
 {% block load %} onload='showDiv("{{ divToShow }}")'{% endblock %}
 
@@ -51,7 +51,7 @@
 
 
 
-    <script src="../static/js/main.js"></script>
+    <script src=" {{ url_for('static', filename='js/main.js') }} "></script>
     <script>
         wPer=Math.min((parseInt({{todayml}})*100)/parseInt({{racml}}),100);
         wPer=parseInt(wPer)
@@ -79,6 +79,6 @@
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="../static/js/bootstrap.js"></script>
+    <script src=" {{ url_for('static', filename='js/bootstrap.js') }} "></script>
 
 {% endblock %}
