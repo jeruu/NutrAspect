@@ -12,7 +12,7 @@
 
     <main class="form-signin">
         <form method="post">
-            <img class="mb-4" src="../static/images/Logo.png" alt="" width="72" height="57">
+            <img class="mb-4" src="../static/images/Logo.png" alt="" width="102" height="57">
             <h1 class="h3 mb-3 fw-normal">Please register</h1>
             <div class="alert alert-success d-flex align-items-center d-none" role="alert" id="RegisterSuccess">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check-circle-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
@@ -52,11 +52,11 @@
             </div>
             <div class="checkbox mb-3">
                 <label>
-                    <input type="checkbox" value="remember-me" name="box">  I've accepted
-                    <a href="../index">Terms and condition</a>
+                    <input type="checkbox" value="remember-me" name="box" id="box" onchange="document.getElementById('submitButton').disabled = !this.checked">  I've accepted
+                    <a href="/terms" target="_blank">Terms and condition</a>
                 </label>
             </div>
-            <button class="w-100 btn btn-lg btn-nutraspect" type="submit">Register</button>
+            <button class="w-100 btn btn-lg btn-nutraspect" type="submit" id="submitButton" disabled>Register</button>
             <p class="mt-5 mb-3 text-muted">&copy; 2021–2021</p>
         </form>
     </main>

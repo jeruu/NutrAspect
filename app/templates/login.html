@@ -12,7 +12,7 @@
     <main class="form-signin">
 
       <form method="post">
-        <img class="mb-4" src="{{ url_for('static', filename='images/Logo.png') }}" alt="" width="72" height="57">
+        <img class="mb-4" src="{{ url_for('static', filename='images/Logo.png') }}" alt="" width="102" height="57">
 
           <div class="alert alert-danger d-flex align-items-center d-none" role="alert" id="LoginError">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
@@ -43,11 +43,6 @@
               <label for="floatingPassword">Password</label>
           </div>
 
-        <div class="checkbox mb-3">
-          <label>
-            <input type="checkbox" value="remember-me" name="box"> Remember me
-          </label>
-        </div>
         <button class="w-100 btn btn-lg btn-nutraspect" type="submit">Sign in</button>
         <p class="mt-5 mb-3 text-muted">&copy; 2021–2021</p>
       </form>
