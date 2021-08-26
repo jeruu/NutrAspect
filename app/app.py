@@ -309,7 +309,7 @@ def foodSelectorPage():
 
     # se il cibo è inserito
     if foodName is not None and gr is not None:
-        if len(foodName) >0 and len(gr) >0:
+        if len(foodName) > 0 and len(gr) > 0:
             # controlliamo se ha già un record con il pasto scelto
             if dailyFood_collection.find_one({'userEmail': uEmail, 'day': todayDate()}) is not None:
                 try:
@@ -336,7 +336,6 @@ def foodSelectorPage():
                 except:
                     divToShow = 'foodAddError'
 
-
     return render_template("foodSelector.html", foodArr=food, divToShow=divToShow)
 
 
@@ -352,11 +351,13 @@ def weightPage():
 
     # se è stato passato un peso
     if weight is not None:
-        try:
+
+        if dailyWeight_collection.find_one({'day': todayDate(), 'userEmail': uEmail}):
             # aggiorniamo quello di oggi
             dailyWeight_collection.update_one({'day': todayDate(), 'userEmail': uEmail},
                                               {'$set': {'weight': float(weight)}})
-        except:
+            print(weight)
+        else:
             # se non possibile inseriamo un nuovo peso
             dailyWeight_collection.insert_one(
                 {'weight': float(weight), 'day': todayDate(), 'userEmail': uEmail})
@@ -406,7 +407,7 @@ def waterPage():
     # se reset è stato premuto allora resettiamo l'acqua di oggi
     if reset is not None:
         dailyWater_collection.delete_one({'userEmail': uEmail, 'day': todayDate()})
-        todayml=0
+        todayml = 0
 
     return render_template('water.html', todayml=todayml, racml=racml)
 
@@ -499,7 +500,8 @@ def profilePage():
             dailyWater_collection.delete_many({'userEmail': uEmail})
             dailyFood_collection.delete_many({'userEmail': uEmail})
             return redirect('/logout')
-    return render_template('profile.html', uEmail=uEmail, uName=uName, uSurname=uSurname, uObjW=uObjW, date=uBDate.strftime("%Y-%m-%d"))
+    return render_template('profile.html', uEmail=uEmail, uName=uName, uSurname=uSurname, uObjW=uObjW,
+                           date=uBDate.strftime("%Y-%m-%d"))
 
 
 # pagina per l'inserimento degli alimenti
