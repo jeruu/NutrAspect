@@ -335,6 +335,7 @@ def foodSelectorPage():
             else:
                 try:
                     # se non ha alcun record ancora veine inserito con mealTemp
+                    mealTemp.append([foodName, gr])
                     dailyFood_collection.insert_one(
                         {'userEmail': uEmail, 'day': todayDate(), meal: mealTemp})
                     divToShow = 'foodAddSuccess'
@@ -430,6 +431,7 @@ def profilePage():
     [dWat, dCal] = watCal(qr['sex'], int(qr['wSport']), yearToday(qr['bDate']), int(weight), qr['height'],
                           qr['objective'])
     users_collection.update_one({'email': uEmail}, {'$set': {'dCal': int(dCal)}})
+
     uName = qr['name']
     uSurname = qr['surname']
     uBDate = qr['bDate']
@@ -460,21 +462,28 @@ def profilePage():
             users_collection.update_one({'email': uEmail}, {'$set': {'name': name}})
     # nel caso in cui il cognome cambia lo aggiorniamo
     if surname is not None:
-        if len(name) > 1:
+        if len(surname) > 1:
             users_collection.update_one({'email': uEmail}, {'$set': {'surname': surname}})
-    # nel caso in cui l'email cambia la aggiorniamo
-    if email is not None:
-        if len(name) > 1:
-            if users_collection.find_one({'email': email}) is None:
-                users_collection.update_one({'email': uEmail}, {'$set': {'email': email}})
 
     # nel caso la data di nascita cambia l'aggiorniamo
     if bDate is not None:
-        if yearToday(bDate) <= 17:
-            pass
-        else:
-            bDate = datetime.datetime.strptime(bDate, '%Y-%m-%d')
-            users_collection.update_one({'email': uEmail}, {'$set': {'bDate': bDate}})
+        bDate = datetime.datetime.strptime(bDate, '%Y-%m-%d')
+
+        if bDate != uBDate:
+            if yearToday(bDate) <= 17:
+                pass
+            else:
+                users_collection.update_one({'email': uEmail}, {'$set': {'bDate': bDate}})
+
+    # nel caso in cui l'email cambia la aggiorniamo
+    if email is not None:
+        if len(email) > 1:
+            if users_collection.find_one({'email': email}) is None:
+                users_collection.update_one({'email': uEmail}, {'$set': {'email': email}})
+                dailyWater_collection.update_many({'userEmail': uEmail}, {'$set': {'userEmail': email}})
+                dailyWeight_collection.update_many({'userEmail': uEmail}, {'$set': {'userEmail': email}})
+                dailyFood_collection.update_many({'userEmail': uEmail}, {'$set': {'userEmail': email}})
+                return redirect('/logout')
 
     # controlli per modifica password
     if oldPsw == uPass:
@@ -506,7 +515,7 @@ def profilePage():
             dailyFood_collection.delete_many({'userEmail': uEmail})
             return redirect('/logout')
     return render_template('profile.html', uEmail=uEmail, uName=uName, uSurname=uSurname, uObjW=uObjW,
-                           date=uBDate.strftime("%Y-%m-%d"))
+                           date=uBDate.strftime('%Y-%m-%d'))
 
 
 # pagina per l'inserimento degli alimenti
