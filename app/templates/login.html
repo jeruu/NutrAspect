@@ -57,11 +57,12 @@
     </main>
 
     <script src=" {{ url_for('static', filename='js/main.js') }} "></script>
+
     <script>
         function showDiv(divName) {
             document.getElementById(divName).classList.remove('d-none');
             if (divName=='LoginSuccess') {
-                setTimeout(cambiasito, 1500)
+                setTimeout(cambiasito, 1000)
             }
         }
         function cambiasito() {

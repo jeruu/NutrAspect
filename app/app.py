@@ -236,6 +236,11 @@ def registerPage():
     return render_template('register.html', divToShow=messageDiv)
 
 
+@app.route('/terms')
+def termsPage():
+    return render_template('terms_and_conditions.html')
+
+
 # pagina per inserire i dati utente per la prima volta, succesivamente modificabili da '/profile'
 @app.route('/bodyComp', methods=['GET', 'POST'])
 @flask_login.login_required
