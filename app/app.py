@@ -5,10 +5,13 @@ from flask import request
 from flask import redirect
 from flask import render_template
 
-from fitness import *
+from app.fitness import *
 
 import flask_login
 import pymongo
+
+# Valore che determina se caricare il mongodb in locale o tramite Docker
+IS_LOCAL = False
 
 # assegnazione app e chiave segreta
 app = Flask(__name__)
@@ -18,7 +21,10 @@ login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 
 # login e inizializzazione db e collection
-client = pymongo.MongoClient('mongodb://localhost:27017/')
+if IS_LOCAL:
+    client = pymongo.MongoClient('mongodb://localhost:27017')
+else:
+    client = pymongo.MongoClient('mongodb://admin:admin@NutrAspectdb:27017')
 db = client['NutrAspect']
 users_collection = db['users']
 dailyWeight_collection = db['dailyWeight']
@@ -227,6 +233,7 @@ def registerPage():
         except Exception as e:
             print(e)
             messageDiv = 'RegisterError'
+
             return render_template('register.html', divToShow=messageDiv)
 
         messageDiv = 'RegisterSuccess'
