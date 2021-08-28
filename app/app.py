@@ -11,7 +11,7 @@ import flask_login
 import pymongo
 
 # Valore che determina se caricare il mongodb in locale o tramite Docker
-IS_LOCAL = False
+IS_LOCAL = True
 
 # assegnazione app e chiave segreta
 app = Flask(__name__)
@@ -25,6 +25,7 @@ if IS_LOCAL:
     client = pymongo.MongoClient('mongodb://localhost:27017')
 else:
     client = pymongo.MongoClient('mongodb://admin:admin@NutrAspectdb:27017')
+
 db = client['NutrAspect']
 users_collection = db['users']
 dailyWeight_collection = db['dailyWeight']
@@ -153,10 +154,16 @@ def loginPage():
     # Setup errore
     messageDiv = ['']
 
-    # Controlliamo se l'utente ha già effettuato il login, nel caso lo reinviamo a home
+    # Controlliamo se l'utente ha già effettuato il login, nel caso lo reinviamo a home o a bodyComp, se l'utente non esiste più, eseguiamo il logout
     try:
         if flask_login.current_user.id is not None:
-            return redirect('/home')
+            if users_collection.find_one({"email": flask_login.current_user.id}) is not None:
+                if dailyWeight_collection.find_one({"userEmail": flask_login.current_user.id}) is not None:
+                    return redirect('/home')
+                else:
+                    return redirect('/bodyComp')
+            else:
+                flask_login.logout_user()
     except:
         pass
 
