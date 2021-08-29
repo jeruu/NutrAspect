@@ -20,7 +20,7 @@ This is a university project made for the 2021 edition of Web Technology (Tecnol
 
 You can test it [*here*]()
 
-## Get Started
+# Get Started
 
 First, you have to choose if you want to load the server and the Mongo Database using Docker or hosting itlocally.
 
@@ -29,7 +29,7 @@ locally or change it into 'false' if you want to use the Docker instance.
 
 Both methods will be shown below.
 
-### Docker method
+## Docker method
 
 Requirements: [*Docker*](https://docs.docker.com/get-docker/), 'IS_LOCAL = false'
 
@@ -61,13 +61,13 @@ mongo --port 27017  --authenticationDatabase "admin" -u "admin" -p "admin"
 
 You now have access to the database!
 
-### Local method
+## Local method
 
 Requirements: [*MongoDB Community Server*](https://www.mongodb.com/try/download/community), 'IS_LOCAL = true'
 
 Simply run the 'wsgi.py' and then open your browser and connect to [localhost:5000](http://localhost:5000)
 
-## Technologies
+# Technologies
 
 The technologies that we used to build this web app are the following:
 
@@ -78,7 +78,7 @@ The technologies that we used to build this web app are the following:
 - MongoDB (Community Edition)
 - Docker
 
-## Open source components
+# Open source components
 
 The list of open source components we used and their authors:
 
