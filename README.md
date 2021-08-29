@@ -22,48 +22,48 @@ You can test it [*here*]()
 
 # Get Started
 
-First, you have to choose if you want to load the server and the Mongo Database using Docker or hosting itlocally.
+First, you have to choose if you want to load the server and the Mongo Database using Docker or hosting it locally.
 
-For doing so you need to change beforehand, into the 'app.py', the value 'IS_LOCAL' (line 14) to 'true' if you want to host it
-locally or change it into 'false' if you want to use the Docker instance.
+For doing so you need to change beforehand, into the `app.py`, the value `IS_LOCAL` (line 14) to `true` if you want to host it
+locally or change it into `false` if you want to use the Docker instance.
 
 Both methods will be shown below.
 
 ## Docker method
 
-Requirements: [*Docker*](https://docs.docker.com/get-docker/), 'IS_LOCAL = false'
+Requirements: [*Docker*](https://docs.docker.com/get-docker/), `IS_LOCAL = false`
 
 First, we need to pull the official **Mongo Docker image** by running the following command
 
-'''bash
+```bash
 docker pull mongo
-'''
+```
 
 After, we have to build a multi-container Docker application by using the Docker tool **Compose**
 
-'''bash
+```bash
 docker-compose up --build
-'''
+```
 
 You are now ready to go! Simply open your browser and connect to the IP shown in the console and have fun.
 
 If you're interested in **accessing the database**, you need to run the following commands
 
-'''bash
+```bash
 docker exec -it nutraspect_app_1 bash
-'''
+```
 
 and then
 
-'''bash
+```bash
 mongo --port 27017  --authenticationDatabase "admin" -u "admin" -p "admin"
-'''
+```
 
 You now have access to the database!
 
 ## Local method
 
-Requirements: [*MongoDB Community Server*](https://www.mongodb.com/try/download/community), 'IS_LOCAL = true'
+Requirements: [*MongoDB Community Server*](https://www.mongodb.com/try/download/community), `IS_LOCAL = true`
 
 Simply run the 'wsgi.py' and then open your browser and connect to [localhost:5000](http://localhost:5000)
 
