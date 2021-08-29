@@ -30,6 +30,7 @@ locally or change it into 'false' if you want to use the Docker instance.
 Both methods will be shown below.
 
 ###Docker method
+
 Requirements: [*Docker*](https://docs.docker.com/get-docker/), 'IS_LOCAL = false'
 
 First, we need to pull the official **Mongo Docker image** by running the following command
@@ -61,11 +62,13 @@ mongo --port 27017  --authenticationDatabase "admin" -u "admin" -p "admin"
 You now have access to the database!
 
 ###Local method
+
 Requirements: [*MongoDB Community Server*](https://www.mongodb.com/try/download/community), 'IS_LOCAL = true'
 
 Simply run the 'wsgi.py' and then open your browser and connect to [localhost:5000](http://localhost:5000)
 
 ## Technologies
+
 The technologies that we used to build this web app are the following:
 
 - HTML
@@ -76,6 +79,7 @@ The technologies that we used to build this web app are the following:
 - Docker
 
 ##Open source components
+
 The list of open source components we used and their authors:
 
 - Flask (licensed under the [BSD 3-Clause "New" or "Revised" License](https://github.com/pallets/flask/blob/main/LICENSE.rst))
@@ -85,6 +89,7 @@ The list of open source components we used and their authors:
 - PyMongo (licensed under the [MIT License](https://github.com/mongodb/mongo-python-driver/blob/master/LICENSE))
 
 ##Assets
+
 The list of the assets we used and their authors:
 
 - */app/static/images/favicons/* made from [realfavicongenerator](https://realfavicongenerator.net/)
