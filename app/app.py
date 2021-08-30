@@ -47,7 +47,7 @@ class User(flask_login.UserMixin):
 @login_manager.user_loader
 def user_loader(email):
     user = User()
-    user.id = email
+    user.id = email.lower()
     return user
 
 
@@ -175,7 +175,7 @@ def loginPage():
     if email is not None and password is not None:
 
         # Verifica se c'è un utente con la mail inserita
-        query = users_collection.find_one({"email": email})
+        query = users_collection.find_one({"email": email.lower()})
 
         # se la query è andata a buon fine, controlliamo la password, se combaciano si effettua il log in altrimenti
         # viene passato un messaggio d'errore
@@ -231,7 +231,7 @@ def registerPage():
                 raise
             if len(password) < 8:
                 raise
-            insQuery = {"email": email, "password": password, "name": name, "surname": surname, "sex": sex,
+            insQuery = {"email": email.lower(), "password": password, "name": name, "surname": surname, "sex": sex,
                         "bDate": bDate,
                         "height": height, 'objective': objective, 'objectiveW': objectiveW, 'dCal': dCal, 'dWat': dWat,
                         "wSport": wSport,
