@@ -1,0 +1,72 @@
+[
+{
+    "_id": {
+        "$oid": "612e3ac304614ff4b3576b2c"
+    },
+    "userEmail": "olimpiapisano@email.com",
+    "day": {
+        "$date": "2021-08-31T00:00:00.000Z"
+    },
+    "Breakfast": [
+        ["Yogurt (low-fat)", "120"]
+    ],
+    "Launch": [
+        ["Beef", "210"],
+        ["Spaghetti", "80"]
+    ],
+    "Snack": [
+        ["Apple", "180"]
+    ],
+    "Dinner": [
+        ["Chicken breast", "180"]
+    ]
+},
+
+{
+    "_id": {
+        "$oid": "612e3c92153e6c881f3ddd22"
+    },
+    "userEmail": "timoteomarino@email.com",
+    "day": {
+        "$date": "2021-08-31T00:00:00.000Z"
+    },
+    "Launch": [
+        ["T-bone", "320"],
+        ["Bread (Whole Weat)", "50"]
+    ],
+    "Breakfast": [
+        ["Milk (whole)", "200"]
+    ],
+    "Snack": [
+        ["Pear", "120"]
+    ],
+    "Dinner": [
+        ["Egg", "120"],
+        ["Egg white", "100"]
+    ]
+},
+
+{
+    "_id": {
+        "$oid": "612e3c92153e6c881f3ddd23"
+    },
+    "userEmail": "olimpiapisano@email.com",
+    "day": {
+        "$date": "2021-08-30T00:00:00.000Z"
+    },
+    "Launch": [
+        ["T-bone", "320"],
+        ["Bread (Whole Weat)", "50"]
+    ],
+    "Breakfast": [
+        ["Milk (whole)", "200"]
+    ],
+    "Snack": [
+        ["Pear", "120"]
+    ],
+    "Dinner": [
+        ["Egg", "120"],
+        ["Egg white", "100"]
+    ]
+}
+]

@@ -5,10 +5,17 @@ from flask import request
 from flask import redirect
 from flask import render_template
 
-from app.fitness import *
+import json
+
+from bson import ObjectId
+
+from app.misc import *
 
 import flask_login
 import pymongo
+
+
+
 
 # Valore che determina se caricare il mongodb in locale o tramite Docker
 IS_LOCAL = True
@@ -32,6 +39,17 @@ dailyWeight_collection = db['dailyWeight']
 dailyWater_collection = db['dailyWater']
 foodList_collection = db['foodList']
 dailyFood_collection = db['dailyFood']
+
+
+# Carichiamo il db dai file json
+fillCollection(users_collection, 'dbJson/users.json', 'bDate')
+fillCollection(users_collection, 'dbJson/admin.json', 'bDate')
+fillCollection(foodList_collection, 'dbJson/foodlist.json', None)
+fillCollection(dailyWeight_collection, 'dbJson/weight.json', 'day')
+fillCollection(dailyWater_collection, 'dbJson/water.json', 'day')
+fillCollection(dailyFood_collection, 'dbJson/dailyfood.json', 'day')
+
+
 
 # avvio del server flask
 if __name__ == '__main__':
@@ -83,10 +101,10 @@ def homePage():
     fatCoeff = .3 / 9
 
     # dump dei dati dal record in mongodb ai vettori divisi per pasto
-    foodArrBreakfast = foodArrDump(dailyMeal, 'Breakfast')
-    foodArrLaunch = foodArrDump(dailyMeal, 'Launch')
-    foodArrDinner = foodArrDump(dailyMeal, 'Dinner')
-    foodArrSnack = foodArrDump(dailyMeal, 'Snack')
+    foodArrBreakfast = foodArrDump(foodList_collection, dailyMeal, 'Breakfast')
+    foodArrLaunch = foodArrDump(foodList_collection, dailyMeal, 'Launch')
+    foodArrDinner = foodArrDump(foodList_collection, dailyMeal, 'Dinner')
+    foodArrSnack = foodArrDump(foodList_collection, dailyMeal, 'Snack')
 
     # somma totale di tutti i nutrimenti della giornata
     for food in foodArrBreakfast:
@@ -612,18 +630,4 @@ def page_not_found(e):
     return render_template('404.html')
 
 
-# funzione per trasferire i dati scalati dal record del cibo di oggi ad un array
-def foodArrDump(dailyMeal, meal):
-    foodArr = []
-    try:
-        dailyMeal[meal]
-    except:
-        return foodArr
-    for food in dailyMeal[meal]:
-        qr = foodList_collection.find({'name': food[0]})
-        grCf = int(food[1]) / 100
-        for x in qr:
-            foodArr.append(
-                [x["name"], food[1], int((x["cal"] * grCf)), int((x["carb"] * grCf)), int((x["protein"] * grCf)),
-                 int((x["fat"] * grCf))])
-    return foodArr
+

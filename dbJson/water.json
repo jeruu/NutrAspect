@@ -1,0 +1,45 @@
+[
+{
+    "_id": {
+        "$oid": "612bc5261ab043985af9c0c6"
+    },
+    "userEmail": "olimpiapisano@email.com",
+    "day": {
+        "$date": "2021-08-29T00:00:00.000Z"
+    },
+    "ml": 1850
+},
+
+{
+    "_id": {
+        "$oid": "612df4b404614ff4b3576af9"
+    },
+    "userEmail": "protasiogreece@email.com",
+    "day": {
+        "$date": "2021-08-31T00:00:00.000Z"
+    },
+    "ml": 1319
+},
+
+{
+    "_id": {
+        "$oid": "612df4df04614ff4b3576afa"
+    },
+    "userEmail": "olimpiapisano@email.com",
+    "day": {
+        "$date": "2021-08-31T00:00:00.000Z"
+    },
+    "ml": 2250
+},
+
+{
+    "_id": {
+        "$oid": "612df51a04614ff4b3576afb"
+    },
+    "userEmail": "timoteomarino@email.com",
+    "day": {
+        "$date": "2021-08-31T00:00:00.000Z"
+    },
+    "ml": 1750
+}
+]

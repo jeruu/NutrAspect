@@ -1,5 +1,6 @@
 import datetime
-
+import json
+from bson import ObjectId
 
 def yearToday(bDate):
     today = datetime.datetime.today()
@@ -50,3 +51,40 @@ def watCal(sex, wSport, yearUser, weight, height, objective):
     if objective == 'wGain':
         dCal += 500
     return [dWat, dCal]
+
+# funzione per riempire la collezione partendo dal json
+def fillCollection(collection, path, datename):
+    # apriamo il file in modalità lettura
+    tFile = open(path, 'r')
+
+    #trasformiamo il file in un json
+    tData = json.load(tFile)
+
+    # per ogni record in tData
+    for u in tData:
+        # riconvertiamo l'id e gestiamo la data e inserimento
+        u['_id'] = ObjectId(u['_id']['$oid'])
+        if datename is not None:
+            u[datename]['$date'] = u[datename]['$date'][:-14]
+            u[datename] = datetime.datetime.strptime(u[datename]['$date'], '%Y-%m-%d')
+        try:
+            collection.insert_one(u)
+        except:
+            pass
+
+
+# funzione per trasferire i dati scalati dal record del cibo di oggi ad un array
+def foodArrDump(collection,dailyMeal, meal):
+    foodArr = []
+    try:
+        dailyMeal[meal]
+    except:
+        return foodArr
+    for food in dailyMeal[meal]:
+        qr = collection.find({'name': food[0]})
+        grCf = int(food[1]) / 100
+        for x in qr:
+            foodArr.append(
+                [x["name"], food[1], int((x["cal"] * grCf)), int((x["carb"] * grCf)), int((x["protein"] * grCf)),
+                 int((x["fat"] * grCf))])
+    return foodArr

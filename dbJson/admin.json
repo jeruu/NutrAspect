@@ -1,0 +1,43 @@
+[
+{
+    "_id": {
+        "$oid": "612bbe6a1ab043985af9c0be"
+    },
+    "email": "ercolelettiere@email.com",
+    "password": "egu0aiDie9",
+    "name": "Ercole",
+    "surname": "Lettiere",
+    "sex": "male",
+    "bDate": {
+        "$date": "1965-12-07T00:00:00.000Z"
+    },
+    "height": 170,
+    "objective": "wGain",
+    "objectiveW": 80,
+    "dCal": 2799,
+    "dWat": 2800,
+    "wSport": 3,
+    "permission": 1
+},
+
+{
+    "_id": {
+        "$oid": "612bbefd1ab043985af9c0c0"
+    },
+    "email": "francescotornaconto@email.com",
+    "password": "ei2aiK7ai",
+    "name": "Francesco",
+    "surname": "Tornaconto",
+    "sex": "male",
+    "bDate": {
+        "$date": "1985-04-05T00:00:00.000Z"
+    },
+    "height": 185,
+    "objective": "wLoss",
+    "objectiveW": 80,
+    "dCal": 3431,
+    "dWat": 2800,
+    "wSport": 5,
+    "permission": 1
+}
+]

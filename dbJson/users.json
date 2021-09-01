@@ -1,0 +1,84 @@
+[{
+    "_id": {
+        "$oid": "612bc4e11ab043985af9c0c4"
+    },
+    "email": "olimpiapisano@email.com",
+    "password": "quiengi9Rae",
+    "name": "Olimpia",
+    "surname": "Pisano",
+    "sex": "female",
+    "bDate": {
+        "$date": "1957-07-19T00:00:00.000Z"
+    },
+    "height": 173,
+    "objective": "wLoss",
+    "objectiveW": 60,
+    "dCal": 1643,
+    "dWat": 2000,
+    "wSport": 7,
+    "permission": 0
+},
+
+{
+    "_id": {
+        "$oid": "612bc5661ab043985af9c0c7"
+    },
+    "email": "timoteomarino@email.com",
+    "password": "Thals1996",
+    "name": "Timoteo",
+    "surname": "Marino",
+    "sex": "male",
+    "bDate": {
+        "$date": "1996-04-21T00:00:00.000Z"
+    },
+    "height": 182,
+    "objective": "wLoss",
+    "objectiveW": 70,
+    "dCal": 2021,
+    "dWat": 2800,
+    "wSport": 0,
+    "permission": 0
+},
+
+{
+    "_id": {
+        "$oid": "612bc5ba1ab043985af9c0c9"
+    },
+    "email": "protasiogreece@email.com",
+    "password": "ir1Xoh3nee",
+    "name": "Protasio",
+    "surname": "Greece",
+    "sex": "male",
+    "bDate": {
+        "$date": "1936-01-30T00:00:00.000Z"
+    },
+    "height": 172,
+    "objective": "wMant",
+    "objectiveW": 69,
+    "dCal": 1795,
+    "dWat": 2800,
+    "wSport": 1,
+    "permission": 0
+},
+
+{
+    "_id": {
+        "$oid": "612bc6011ab043985af9c0cb"
+    },
+    "email": "tarquiniopirozzi@email.it",
+    "password": "Yie8ovahMu",
+    "name": "Tarquinio",
+    "surname": "Pirozzi",
+    "sex": "todo",
+    "bDate": {
+        "$date": "1955-10-07T00:00:00.000Z"
+    },
+    "height": 0,
+    "objective": "todo",
+    "objectiveW": 0,
+    "dCal": 0,
+    "dWat": 0,
+    "wSport": 0,
+    "permission": 0
+}
+]

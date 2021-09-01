@@ -1,5 +1,5 @@
 from app.app import  app
-from app.fitness import *
+from app.misc import *
 
 if __name__ == "__main__":
     app.run()

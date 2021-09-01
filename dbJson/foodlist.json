@@ -1,0 +1,541 @@
+[
+{
+    "_id": {
+        "$oid": "612e17cb04614ff4b3576afe"
+    },
+    "name": "Beef",
+    "cal": 250,
+    "carb": 0,
+    "protein": 26,
+    "fat": 15,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e180304614ff4b3576aff"
+    },
+    "name": "Steak",
+    "cal": 134,
+    "carb": 0,
+    "protein": 21,
+    "fat": 5,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e182304614ff4b3576b00"
+    },
+    "name": "T-bone",
+    "cal": 247,
+    "carb": 0,
+    "protein": 24,
+    "fat": 16,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e18a804614ff4b3576b01"
+    },
+    "name": "Porkchop",
+    "cal": 231,
+    "carb": 0,
+    "protein": 24,
+    "fat": 14,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e18d504614ff4b3576b02"
+    },
+    "name": "Cod",
+    "cal": 91,
+    "carb": 0,
+    "protein": 17,
+    "fat": 1,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e192c04614ff4b3576b03"
+    },
+    "name": "Salmon",
+    "cal": 208,
+    "carb": 0,
+    "protein": 20,
+    "fat": 13,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e194e04614ff4b3576b04"
+    },
+    "name": "Smoked salmon",
+    "cal": 117,
+    "carb": 0,
+    "protein": 18,
+    "fat": 4,
+    "validate": false
+},
+
+{
+    "_id": {
+        "$oid": "612e198d04614ff4b3576b05"
+    },
+    "name": "Chicken breast",
+    "cal": 165,
+    "carb": 0,
+    "protein": 31,
+    "fat": 4,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e19a604614ff4b3576b06"
+    },
+    "name": "Chicken legs",
+    "cal": 177,
+    "carb": 0,
+    "protein": 24,
+    "fat": 8,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1a1504614ff4b3576b07"
+    },
+    "name": "Turkey breast",
+    "cal": 189,
+    "carb": 0,
+    "protein": 29,
+    "fat": 7,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1a6504614ff4b3576b08"
+    },
+    "name": "Turkey legs",
+    "cal": 141,
+    "carb": 0,
+    "protein": 20,
+    "fat": 6,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1a9704614ff4b3576b09"
+    },
+    "name": "Mozzarella",
+    "cal": 280,
+    "carb": 3,
+    "protein": 28,
+    "fat": 17,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1acc04614ff4b3576b0a"
+    },
+    "name": "Cheddar",
+    "cal": 402,
+    "carb": 1,
+    "protein": 25,
+    "fat": 33,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1afe04614ff4b3576b0b"
+    },
+    "name": "Emmenthal",
+    "cal": 357,
+    "carb": 2,
+    "protein": 25,
+    "fat": 27,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1b1a04614ff4b3576b0c"
+    },
+    "name": "Parmesan",
+    "cal": 431,
+    "carb": 4,
+    "protein": 38,
+    "fat": 29,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1b5404614ff4b3576b0d"
+    },
+    "name": "Feta",
+    "cal": 264,
+    "carb": 4,
+    "protein": 14,
+    "fat": 21,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1bd304614ff4b3576b0e"
+    },
+    "name": "Spaghetti",
+    "cal": 158,
+    "carb": 31,
+    "protein": 6,
+    "fat": 1,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1c3404614ff4b3576b0f"
+    },
+    "name": "Fusilli",
+    "cal": 359,
+    "carb": 71,
+    "protein": 12,
+    "fat": 2,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1c6304614ff4b3576b10"
+    },
+    "name": "Potatoes",
+    "cal": 77,
+    "carb": 17,
+    "protein": 2,
+    "fat": 1,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1d4604614ff4b3576b11"
+    },
+    "name": "Olive oil",
+    "cal": 899,
+    "carb": 0,
+    "protein": 0,
+    "fat": 100,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1d6904614ff4b3576b12"
+    },
+    "name": "Sunflower oil",
+    "cal": 884,
+    "carb": 0,
+    "protein": 0,
+    "fat": 100,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1da204614ff4b3576b13"
+    },
+    "name": "Bread (Whole Weat)",
+    "cal": 265,
+    "carb": 49,
+    "protein": 9,
+    "fat": 3,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1dc404614ff4b3576b14"
+    },
+    "name": "Croissant",
+    "cal": 406,
+    "carb": 46,
+    "protein": 8,
+    "fat": 21,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1dd704614ff4b3576b15"
+    },
+    "name": "Focaccia",
+    "cal": 250,
+    "carb": 36,
+    "protein": 9,
+    "fat": 8,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1df304614ff4b3576b16"
+    },
+    "name": "Butter",
+    "cal": 717,
+    "carb": 0,
+    "protein": 0,
+    "fat": 81,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1ed604614ff4b3576b17"
+    },
+    "name": "Honey",
+    "cal": 304,
+    "carb": 82,
+    "protein": 0,
+    "fat": 0,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1ef304614ff4b3576b18"
+    },
+    "name": "Egg",
+    "cal": 155,
+    "carb": 1,
+    "protein": 13,
+    "fat": 11,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1f1504614ff4b3576b19"
+    },
+    "name": "Egg white",
+    "cal": 52,
+    "carb": 1,
+    "protein": 11,
+    "fat": 0,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1f4104614ff4b3576b1a"
+    },
+    "name": "Ham",
+    "cal": 145,
+    "carb": 1,
+    "protein": 21,
+    "fat": 6,
+    "validate": false
+},
+
+{
+    "_id": {
+        "$oid": "612e1f5a04614ff4b3576b1b"
+    },
+    "name": "Apple",
+    "cal": 52,
+    "carb": 14,
+    "protein": 0,
+    "fat": 0,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1f8304614ff4b3576b1c"
+    },
+    "name": "Pear",
+    "cal": 100,
+    "carb": 15,
+    "protein": 0,
+    "fat": 0,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1fad04614ff4b3576b1d"
+    },
+    "name": "Rice (Basmati)",
+    "cal": 360,
+    "carb": 82,
+    "protein": 4,
+    "fat": 0,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e1fdd04614ff4b3576b1e"
+    },
+    "name": "Rice (white)",
+    "cal": 130,
+    "carb": 28,
+    "protein": 3,
+    "fat": 0,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e201604614ff4b3576b1f"
+    },
+    "name": "Rice (arborio)",
+    "cal": 130,
+    "carb": 29,
+    "protein": 3,
+    "fat": 0,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e205d04614ff4b3576b20"
+    },
+    "name": "Legumes (fresh)",
+    "cal": 295,
+    "carb": 49,
+    "protein": 22,
+    "fat": 2,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e206a04614ff4b3576b21"
+    },
+    "name": "Peas",
+    "cal": 52,
+    "carb": 12,
+    "protein": 76,
+    "fat": 0,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e208104614ff4b3576b22"
+    },
+    "name": "Muesli",
+    "cal": 364,
+    "carb": 72,
+    "protein": 9,
+    "fat": 6,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e211804614ff4b3576b23"
+    },
+    "name": "Rusks",
+    "cal": 379,
+    "carb": 62,
+    "protein": 14,
+    "fat": 10,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e213804614ff4b3576b24"
+    },
+    "name": "Milk (whole)",
+    "cal": 64,
+    "carb": 5,
+    "protein": 3,
+    "fat": 3,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e215904614ff4b3576b25"
+    },
+    "name": "Milk (low-fat)",
+    "cal": 46,
+    "carb": 5,
+    "protein": 3,
+    "fat": 1,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e218004614ff4b3576b26"
+    },
+    "name": "Yogurt (greek)",
+    "cal": 115,
+    "carb": 2,
+    "protein": 6,
+    "fat": 9,
+    "validate": false
+},
+
+{
+    "_id": {
+        "$oid": "612e21b604614ff4b3576b27"
+    },
+    "name": "Yogurt (whole)",
+    "cal": 66,
+    "carb": 4,
+    "protein": 4,
+    "fat": 4,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e21d104614ff4b3576b28"
+    },
+    "name": "Yogurt (low-fat)",
+    "cal": 36,
+    "carb": 4,
+    "protein": 3,
+    "fat": 1,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e21f304614ff4b3576b29"
+    },
+    "name": "Jam",
+    "cal": 222,
+    "carb": 59,
+    "protein": 0,
+    "fat": 0,
+    "validate": true
+},
+
+{
+    "_id": {
+        "$oid": "612e220c04614ff4b3576b2a"
+    },
+    "name": "Sugar",
+    "cal": 392,
+    "carb": 100,
+    "protein": 0,
+    "fat": 0,
+    "validate": true
+}
+]
