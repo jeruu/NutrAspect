@@ -22,7 +22,7 @@ IS_LOCAL = True
 
 # assegnazione app e chiave segreta
 app = Flask(__name__)
-app.secret_key = 'chiavesecreta'
+app.secret_key = '4815162342'
 
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
