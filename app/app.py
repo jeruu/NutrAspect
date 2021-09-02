@@ -31,7 +31,7 @@ login_manager.init_app(app)
 if IS_LOCAL:
     client = pymongo.MongoClient('mongodb://localhost:27017')
 else:
-    client = pymongo.MongoClient('mongodb://admin:admin@NutrAspectdb:27017')
+    client = pymongo.MongoClient('mongodb://admin:admin@db:27017')
 
 db = client['NutrAspect']
 users_collection = db['users']
