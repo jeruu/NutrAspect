@@ -18,7 +18,7 @@ This is a university project made for the 2021 edition of Web Technology (Tecnol
 | :exclamation:  This project was made for learning purposes only. It should not replace a professional |
 |-------------------------------------------------------------------------------------------------------|
 
-You can test it [*here*]()
+
 
 # Get Started
 
