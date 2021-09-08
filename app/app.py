@@ -1,21 +1,13 @@
 import datetime
-
 from flask import Flask
 from flask import request
 from flask import redirect
 from flask import render_template
 
-import json
-
-from bson import ObjectId
-
 from app.misc import *
 
 import flask_login
 import pymongo
-
-
-
 
 # Valore che determina se caricare il mongodb in locale o tramite Docker
 IS_LOCAL = True
@@ -40,7 +32,6 @@ dailyWater_collection = db['dailyWater']
 foodList_collection = db['foodList']
 dailyFood_collection = db['dailyFood']
 
-
 # Carichiamo il db dai file json
 fillCollection(users_collection, 'dbJson/users.json', 'bDate')
 fillCollection(users_collection, 'dbJson/admin.json', 'bDate')
@@ -48,8 +39,6 @@ fillCollection(foodList_collection, 'dbJson/foodlist.json', None)
 fillCollection(dailyWeight_collection, 'dbJson/weight.json', 'day')
 fillCollection(dailyWater_collection, 'dbJson/water.json', 'day')
 fillCollection(dailyFood_collection, 'dbJson/dailyfood.json', 'day')
-
-
 
 # avvio del server flask
 if __name__ == '__main__':
@@ -239,7 +228,6 @@ def registerPage():
     objective = 'todo'
     objectiveW = 0
     permission = 0
-
     if email is not None:
         try:
             if users_collection.find_one({'email': email}) is not None:
@@ -255,19 +243,13 @@ def registerPage():
                         "wSport": wSport,
                         "permission": permission}
             users_collection.insert_one(insQuery)
-        except Exception as e:
-            print(e)
+            messageDiv = 'RegisterSuccess'
+        except:
             messageDiv = 'RegisterError'
-
-            return render_template('register.html', divToShow=messageDiv)
-
-        messageDiv = 'RegisterSuccess'
-        # Carichiamo la pagina registrata con successo
-        return render_template('register.html', divToShow=messageDiv)
 
     return render_template('register.html', divToShow=messageDiv)
 
-
+# pagina per i termini e condizioni
 @app.route('/terms')
 def termsPage():
     return render_template('terms_and_conditions.html')
@@ -366,7 +348,7 @@ def foodSelectorPage():
                     divToShow = 'foodAddError'
             else:
                 try:
-                    # se non ha alcun record ancora veine inserito con mealTemp
+                    # se non ha alcun record ancora viene inserito con mealTemp
                     mealTemp.append([foodName, gr])
                     dailyFood_collection.insert_one(
                         {'userEmail': uEmail, 'day': todayDate(), meal: mealTemp})
@@ -394,7 +376,6 @@ def weightPage():
             # aggiorniamo quello di oggi
             dailyWeight_collection.update_one({'day': todayDate(), 'userEmail': uEmail},
                                               {'$set': {'weight': float(weight)}})
-            print(weight)
         else:
             # se non possibile inseriamo un nuovo peso
             dailyWeight_collection.insert_one(
@@ -628,6 +609,3 @@ def adminPage():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html')
-
-
-
