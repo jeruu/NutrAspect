@@ -230,7 +230,7 @@ def registerPage():
     permission = 0
     if email is not None:
         try:
-            if users_collection.find_one({'email': email}) is not None:
+            if users_collection.find_one({'email': email.lower()}) is not None:
                 raise
             bDate = datetime.datetime.strptime(bDate, '%Y-%m-%d')
             if yearToday(bDate) <= 17:
@@ -409,7 +409,7 @@ def waterPage():
     todayml = 0
 
     try:
-        # se esiste un record riprendiamo gli ml giornalieri e li aggiorniamo
+        # se esiste un record prendiamo i ml giornalieri e li aggiorniamo
         todayml = \
             dailyWater_collection.find_one({'userEmail': uEmail, 'day': todayDate()})['ml']
         if isNumber(water):
